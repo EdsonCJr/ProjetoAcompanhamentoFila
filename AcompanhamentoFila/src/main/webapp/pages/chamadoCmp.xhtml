@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="/template/template.xhtml">
+
+
+	<ui:define name="conteudo">
+		<h:form>
+			<p:panel header="Lista de chamados">
+				<p:dataTable paginator="true" value="#{chamadoMB.listaDeChamados}"
+					var="chamado" rows="10" paginatorPosition="bottom">
+					<f:facet name="header">
+						<p:commandButton value="Upload"
+							oncomplete="PF('uplArquivo').show();"
+							actionListener="#{chamadoMB.novo}" />
+					</f:facet>
+
+					<p:column headerText="Número chamado"
+						filterBy="#{chamado.numeroChamado}"
+						sortBy="#{chamado.numeroChamado}">
+						<h:outputText value="#{chamado.numeroChamado}" />
+					</p:column>
+
+					<p:column headerText="Data abertura">
+						<h:outputText value="#{chamado.dataAbertura}" />
+					</p:column>
+
+					<p:column headerText="Status chamado"
+						filterBy="#{chamado.statusChamado}">
+						<h:outputText value="#{chamado.statusChamado}" />
+					</p:column>
+
+					<p:column headerText="Setor Abertura">
+						<h:outputText value="#{chamado.setorAbertura}" />
+					</p:column>
+
+					<p:column headerText="Criticidade"
+						filterBy="#{chamado.criticidade}">
+						<h:outputText value="#{chamado.criticidade}" />
+					</p:column>
+
+					<p:column headerText="Operadores" filterBy="#{chamado.operadores}">
+						<h:outputText value="#{chamado.operadores}" />
+					</p:column>
+
+					<p:column headerText="Vencimento SLA">
+						<h:outputText value="#{chamado.vencimentoSla}" />
+					</p:column>
+
+					<p:column>
+						<p:commandButton icon="ui-icon-search"
+							actionListener="#{chamadoMB.visualizar}"
+							oncomplete="PF('dlgChamado').show();"
+							update=":fmrChamado:painelChamado">
+							<f:attribute name="chamadoSelecionado" value="#{chamado}" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</p:panel>
+
+		</h:form>
+
+		<p:ajaxStatus onstart="PF('statusUpl').show()"
+			onsuccess="PF('statusUpl').hide()" />
+		<p:dialog widgetVar="statusUpl" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false"
+			showEffect="fade">
+			<h:form>
+				<p:graphicImage library="image" name="loadingBar1.gif" />
+			</h:form>
+		</p:dialog>
+
+		<p:dialog header="Upload do arquivo de chamados"
+			widgetVar="uplArquivo" draggable="false" resizable="false"
+			modal="true" showEffect="fade" hideEffect="fade">
+
+			<h:form id="fmrUpl" enctype="multipart/form-data">
+				<h:panelGrid>
+					<p:outputLabel for="upFile" value="Escolha o arquivo" />
+					<p:fileUpload id="upFile" mode="advanced"
+						fileUploadListener="#{chamadoMB.uploadFile}" update="mensagem"
+						auto="true" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="3">
+					<p:commandButton value="Salvar"
+						actionListener="#{chamadoMB.salvar}" update=":mensagem" />
+					<p:commandButton value="Fechar"
+						oncomplete="PF('uplArquivo').hide();" />
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+
+		<p:dialog header="Detalhes do chamado" widgetVar="dlgChamado"
+			draggable="false" resizable="false" modal="true" showEffect="fade"
+			hideEffect="fade" width="500px" height="500px">
+
+			<h:form id="fmrChamado">
+				<p:panelGrid id="painelChamado">
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="4">
+								<h:outputLabel value="Informações do chamado" />
+							</p:column>
+						</p:row>
+					</f:facet>
+
+					<p:row>
+						<p:column>
+							<h:outputLabel value="Número do Chamado" />
+						</p:column>
+						<p:column>
+							<h:outputLabel value="Status do Chamado" />
+						</p:column>
+						<p:column>
+							<h:outputLabel value="Criticidade" />
+						</p:column>
+						<p:column>
+							<h:outputLabel value="Vencimanento SLA" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText value="#{chamadoMB.chamado.numeroChamado}" />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{chamadoMB.chamado.statusChamado}" />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{chamadoMB.chamado.criticidade}" />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{chamadoMB.chamado.vencimentoSla}" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4">
+							<p:spacer height="0" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4" styleClass="ui-widget-header">
+							<h:outputLabel value="Informações do usuário" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel value="Código do Cliente" />
+						</p:column>
+						<p:column>
+							<h:outputLabel value="Nome do Cliente" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText value="#{chamadoMB.chamado.codigoCliente}" />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{chamadoMB.chamado.nomeCliente}" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4">
+							<p:spacer height="0" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4" styleClass="ui-widget-header">
+							<h:outputLabel value="Informações do sistema" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel value="Setor de Abertura" />
+						</p:column>
+						<p:column>
+							<h:outputLabel value="Problema Abertura" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText value="#{chamadoMB.chamado.setorAbertura}" />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{chamadoMB.chamado.problemaAbertura}" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4">
+							<p:spacer height="0" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4" styleClass="ui-widget-header">
+							<h:outputLabel value="Descrição Problema" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4" resizable="false">
+							<h:outputText value="#{chamadoMB.chamado.descricaoProblema}" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4">
+							<p:spacer height="0" />
+						</p:column>
+					</p:row>
+
+
+					<p:row>
+						<p:column colspan="4" styleClass="ui-widget-header">
+							<h:outputLabel value="Operador" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4">
+							<h:outputText value="#{chamadoMB.chamado.operadores}" />
+						</p:column>
+					</p:row>
+
+				</p:panelGrid>
+				<p:panelGrid>
+					<p:commandButton value="Fechar"
+						oncomplete="PF('dlgChamado').hide();" />
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
