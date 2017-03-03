@@ -9,9 +9,9 @@
 
 
 	<ui:define name="conteudo">
-		<h:form>
+		<h:form id="fmrcallList">
 			<p:panel header="Lista de chamados">
-				<p:dataTable paginator="true" value="#{chamadoMB.listaDeChamados}"
+				<p:dataTable id="tblChamado" paginator="true" value="#{chamadoMB.listaDeChamados}"
 					var="chamado" rows="10" paginatorPosition="bottom">
 					<f:facet name="header">
 						<p:commandButton value="Upload"
@@ -89,7 +89,7 @@
 
 				<h:panelGrid columns="3">
 					<p:commandButton value="Salvar"
-						actionListener="#{chamadoMB.salvar}" update=":mensagem" />
+						actionListener="#{chamadoMB.salvar}" update=":mensagem :fmrcallList:tblChamado" />
 					<p:commandButton value="Fechar"
 						oncomplete="PF('uplArquivo').hide();" />
 				</h:panelGrid>

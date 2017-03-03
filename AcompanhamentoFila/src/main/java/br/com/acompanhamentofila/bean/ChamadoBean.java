@@ -243,6 +243,8 @@ public class ChamadoBean implements Serializable {
 				 * Salvando os chamados no banco de dados
 				 */
 				chamadoDAO.merge(chamado);
+				
+				
 
 			}
 			scanner.close();
@@ -263,6 +265,8 @@ public class ChamadoBean implements Serializable {
 			tmpList.removeAll(newList);
 			
 			chamadoDAO.fecharChamado(tmpList);
+			
+			listaDeChamados = chamadoDAO.listarChamadosAbertos();
 
 		} catch (IOException | ParseException | RuntimeException exception) {
 			Messages.addGlobalError("Ocorreu um erro ao salvar a lista de chamados");
