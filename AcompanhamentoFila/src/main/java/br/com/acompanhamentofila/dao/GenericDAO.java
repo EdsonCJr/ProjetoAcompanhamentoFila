@@ -3,8 +3,6 @@ package br.com.acompanhamentofila.dao;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaQuery;
-
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;

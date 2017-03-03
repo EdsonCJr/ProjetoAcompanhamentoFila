@@ -235,7 +235,7 @@ public class ChamadoBean implements Serializable {
 				chamado.setVisibilidade(visibilidade);
 
 				/*
-				 * Adicionado os chamados a newList
+				 * Adicionado os chamados a lista newList
 				 */
 				newList.add(chamado);
 
@@ -257,14 +257,18 @@ public class ChamadoBean implements Serializable {
 			 * foram encerrados, resolvidos ou transferido de fila e que serão
 			 * atualizados pelo método encerrarChamado.
 			 */
+
 			List<Chamado> tmpList = new ArrayList<>();
 			tmpList.addAll(oldList);
 			tmpList.removeAll(newList);
+			
+			chamadoDAO.fecharChamado(tmpList);
 
 		} catch (IOException | ParseException | RuntimeException exception) {
 			Messages.addGlobalError("Ocorreu um erro ao salvar a lista de chamados");
 			exception.printStackTrace();
 		}
+
 	}
 
 	public void visualizar(ActionEvent event) {
@@ -282,7 +286,7 @@ public class ChamadoBean implements Serializable {
 	public void listar() {
 		try {
 			ChamadoDAO chamadoDao = new ChamadoDAO();
-			listaDeChamados = chamadoDao.listar();
+			listaDeChamados = chamadoDao.listarChamadosAbertos();
 
 		} catch (RuntimeException e) {
 			Messages.addGlobalError("Ocorreu um erro ao listar os chamados");
