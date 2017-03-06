@@ -11,8 +11,9 @@
 	<ui:define name="conteudo">
 		<h:form id="fmrcallList">
 			<p:panel header="Lista de chamados">
-				<p:dataTable id="tblChamado" paginator="true" value="#{chamadoMB.listaDeChamados}"
-					var="chamado" rows="10" paginatorPosition="bottom">
+				<p:dataTable id="tblChamado" paginator="true"
+					value="#{chamadoMB.listaDeChamados}" var="chamado" rows="10"
+					paginatorPosition="bottom">
 					<f:facet name="header">
 						<p:commandButton value="Upload"
 							oncomplete="PF('uplArquivo').show();"
@@ -31,6 +32,10 @@
 
 					<p:column headerText="Status chamado"
 						filterBy="#{chamado.statusChamado}">
+						<f:facet name="filter">
+							<p:selectOneMenu>
+							</p:selectOneMenu>
+						</f:facet>
 						<h:outputText value="#{chamado.statusChamado}" />
 					</p:column>
 
@@ -89,7 +94,8 @@
 
 				<h:panelGrid columns="3">
 					<p:commandButton value="Salvar"
-						actionListener="#{chamadoMB.salvar}" update=":mensagem :fmrcallList:tblChamado" />
+						actionListener="#{chamadoMB.salvar}"
+						update=":mensagem :fmrcallList:tblChamado" />
 					<p:commandButton value="Fechar"
 						oncomplete="PF('uplArquivo').hide();" />
 				</h:panelGrid>

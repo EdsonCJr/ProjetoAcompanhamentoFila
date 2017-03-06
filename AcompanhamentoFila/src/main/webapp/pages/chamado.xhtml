@@ -11,10 +11,11 @@
 </h:head>
 <h:body>
 	<p:growl id="mensagem" />
-	<h:form>
+	<h:form id="fmrcallList">
 		<p:panel header="Lista de chamados">
-			<p:dataTable paginator="true" value="#{chamadoMB.listaDeChamados}"
-				var="chamado" rows="10">
+			<p:dataTable id="tblChamado" paginator="true"
+				value="#{chamadoMB.listaDeChamados}" var="chamado" rows="10"
+				paginatorPosition="bottom">
 				<f:facet name="header">
 					<p:commandButton value="Upload"
 						oncomplete="PF('uplArquivo').show();"
@@ -22,7 +23,6 @@
 				</f:facet>
 
 				<p:column headerText="Número chamado"
-					filterBy="#{chamado.numeroChamado}"
 					sortBy="#{chamado.numeroChamado}">
 					<h:outputText value="#{chamado.numeroChamado}" />
 				</p:column>
@@ -33,6 +33,22 @@
 
 				<p:column headerText="Status chamado"
 					filterBy="#{chamado.statusChamado}">
+					<f:facet name="filter">
+						<p:selectOneMenu onchange="PF('tblChamado').filter()" >
+							<f:selectItem itemLabel="Selecione um status"
+								noSelectionOption="true" />
+							<f:selectItems value="#{chamado.statusChamado}" />
+							<!--
+							<f:selectItem itemLabel="Aguardando intervenção"
+								itemValue="Aguardando intervenção" />
+							<f:selectItem itemLabel="Aguardando Retorno do Usuário"
+								itemValue="Aguardando Retorno do Usuário" />
+							<f:selectItem itemLabel="Atribuido" itemValue="Atribuido" />
+							<f:selectItem itemLabel="Designado" itemValue="Designado" />
+							<f:selectItem itemLabel="Reatribuido" itemValue="Reatribuido" />
+							-->
+						</p:selectOneMenu>
+					</f:facet>
 					<h:outputText value="#{chamado.statusChamado}" />
 				</p:column>
 
@@ -40,11 +56,11 @@
 					<h:outputText value="#{chamado.setorAbertura}" />
 				</p:column>
 
-				<p:column headerText="Criticidade" filterBy="#{chamado.criticidade}">
+				<p:column headerText="Criticidade">
 					<h:outputText value="#{chamado.criticidade}" />
 				</p:column>
 
-				<p:column headerText="Operadores" filterBy="#{chamado.operadores}">
+				<p:column headerText="Operadores" filterBy="">
 					<h:outputText value="#{chamado.operadores}" />
 				</p:column>
 
@@ -54,25 +70,17 @@
 
 				<p:column>
 					<p:commandButton icon="ui-icon-search"
-						oncomplete="PF('dlgChamado').show();"
 						actionListener="#{chamadoMB.visualizar}"
-						update=":mensagem :fmrChamado:painelChamado :fmrChamado:painelUsuario :fmrChamado:painelSintoma :fmrChamado:descricao :fmrChamado:operador">
+						oncomplete="PF('dlgChamado').show();"
+						update=":fmrChamado:painelChamado">
 						<f:attribute name="chamadoSelecionado" value="#{chamado}" />
 					</p:commandButton>
 				</p:column>
 
 			</p:dataTable>
 		</p:panel>
-	</h:form>
 
-	<p:ajaxStatus onstart="PF('statusUpl').show()"
-		onsuccess="PF('statusUpl').hide()" />
-	<p:dialog widgetVar="statusUpl" modal="true" draggable="false"
-		closable="false" resizable="false" showHeader="false" showEffect="fade">
-		<h:form>
-			<p:graphicImage library="image" name="loadingBar.gif"/>
-		</h:form>
-	</p:dialog>
+	</h:form>
 
 	<p:dialog header="Upload do arquivo de chamados" widgetVar="uplArquivo"
 		draggable="false" resizable="false" modal="true" showEffect="fade"
@@ -87,10 +95,8 @@
 			</h:panelGrid>
 
 			<h:panelGrid columns="3">
-				<p:commandButton value="Carregar"
-					actionListener="#{chamadoMB.carregar}" update=":mensagem" />
 				<p:commandButton value="Salvar" actionListener="#{chamadoMB.salvar}"
-					update=":mensagem" oncomplete="PF('uplArquivo').hide();" />
+					update=":mensagem :fmrcallList:tblChamado" />
 				<p:commandButton value="Fechar"
 					oncomplete="PF('uplArquivo').hide();" />
 			</h:panelGrid>
@@ -100,126 +106,143 @@
 
 	<p:dialog header="Detalhes do chamado" widgetVar="dlgChamado"
 		draggable="false" resizable="false" modal="true" showEffect="fade"
-		hideEffect="fade">
+		hideEffect="fade" width="500px" height="500px">
 
 		<h:form id="fmrChamado">
 			<p:panelGrid id="painelChamado">
 				<f:facet name="header">
 					<p:row>
-						<p:column>
+						<p:column colspan="4">
 							<h:outputLabel value="Informações do chamado" />
 						</p:column>
 					</p:row>
-					<p:row>
-						<p:column>
-							<h:outputLabel value="Número do Chamado" />
-						</p:column>
-						<p:column>
-							<h:outputLabel value="Status do Chamado" />
-						</p:column>
-						<p:column>
-							<h:outputLabel value="Criticidade" />
-						</p:column>
-						<p:column>
-							<h:outputLabel value="Vencimanento SLA" />
-						</p:column>
-					</p:row>
-				</f:facet>
-				<p:row>
-					<p:column>
-						<h:outputLabel value="#{chamadoMB.chamado.numeroChamado}" />
-					</p:column>
-					<p:column>
-						<h:outputLabel value="#{chamadoMB.chamado.statusChamado}" />
-					</p:column>
-					<p:column>
-						<h:outputLabel value="#{chamadoMB.chamado.criticidade}" />
-					</p:column>
-					<p:column>
-						<h:outputLabel value="#{chamadoMB.chamado.vencimentoSla}" />
-					</p:column>
-				</p:row>
-			</p:panelGrid>
-
-			<p:panelGrid id="painelUsuario">
-				<f:facet name="header">
-					<p:row>
-						<p:column>
-							<h:outputLabel value="Informações do usuário" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column>
-							<h:outputLabel value="Código do Cliente" />
-						</p:column>
-						<p:column>
-							<h:outputLabel value="Nome do Cliente" />
-						</p:column>
-					</p:row>
 				</f:facet>
 
 				<p:row>
 					<p:column>
-						<h:outputLabel value="#{chamadoMB.chamado.codigoCliente}" />
+						<h:outputLabel value="Número do Chamado" />
 					</p:column>
 					<p:column>
-						<h:outputLabel value="#{chamadoMB.chamado.nomeCliente}" />
+						<h:outputLabel value="Status do Chamado" />
+					</p:column>
+					<p:column>
+						<h:outputLabel value="Criticidade" />
+					</p:column>
+					<p:column>
+						<h:outputLabel value="Vencimanento SLA" />
 					</p:column>
 				</p:row>
-			</p:panelGrid>
 
-			<p:panelGrid id="painelSintoma">
-				<f:facet name="header">
-					<p:row>
-						<p:column>
-							<h:outputLabel value="Informações de sintoma" />
-						</p:column>
-					</p:row>
-					<p:row>
-						<p:column>
-							<h:outputLabel value="Setor de Abertura" />
-						</p:column>
-						<p:column>
-							<h:outputLabel value="Problema Abertura" />
-						</p:column>
-					</p:row>
-				</f:facet>
 				<p:row>
 					<p:column>
-						<h:outputLabel value="#{chamadoMB.chamado.setorAbertura}" />
+						<h:outputText value="#{chamadoMB.chamado.numeroChamado}" />
 					</p:column>
 					<p:column>
-						<h:outputLabel value="#{chamadoMB.chamado.problemaAbertura}" />
+						<h:outputText value="#{chamadoMB.chamado.statusChamado}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{chamadoMB.chamado.criticidade}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{chamadoMB.chamado.vencimentoSla}" />
 					</p:column>
 				</p:row>
-			</p:panelGrid>
-			<p:panelGrid id="descricao">
-				<f:facet name="header">
-					<p:row>
-						<p:column>
-							<h:outputLabel value="Descrição Problema" />
-						</p:column>
-					</p:row>
-				</f:facet>
+
+				<p:row>
+					<p:column colspan="4">
+						<p:spacer height="0" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column colspan="4" styleClass="ui-widget-header">
+						<h:outputLabel value="Informações do usuário" />
+					</p:column>
+				</p:row>
 				<p:row>
 					<p:column>
-						<h:outputLabel value="#{chamadoMB.chamado.descricaoProblema}" />
+						<h:outputLabel value="Código do Cliente" />
+					</p:column>
+					<p:column>
+						<h:outputLabel value="Nome do Cliente" />
 					</p:column>
 				</p:row>
-			</p:panelGrid>
-			<p:panelGrid id="operador">
-				<f:facet name="header">
-					<p:row>
-						<p:column>
-							<h:outputLabel value="Operador" />
-						</p:column>
-					</p:row>
-				</f:facet>
+
 				<p:row>
 					<p:column>
-						<h:outputLabel value="#{chamadoMB.chamado.operadores}" />
+						<h:outputText value="#{chamadoMB.chamado.codigoCliente}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{chamadoMB.chamado.nomeCliente}" />
 					</p:column>
 				</p:row>
+
+				<p:row>
+					<p:column colspan="4">
+						<p:spacer height="0" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column colspan="4" styleClass="ui-widget-header">
+						<h:outputLabel value="Informações do sistema" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<h:outputLabel value="Setor de Abertura" />
+					</p:column>
+					<p:column>
+						<h:outputLabel value="Problema Abertura" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column>
+						<h:outputText value="#{chamadoMB.chamado.setorAbertura}" />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{chamadoMB.chamado.problemaAbertura}" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column colspan="4">
+						<p:spacer height="0" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column colspan="4" styleClass="ui-widget-header">
+						<h:outputLabel value="Descrição Problema" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column colspan="4" resizable="false">
+						<h:outputText value="#{chamadoMB.chamado.descricaoProblema}" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column colspan="4">
+						<p:spacer height="0" />
+					</p:column>
+				</p:row>
+
+
+				<p:row>
+					<p:column colspan="4" styleClass="ui-widget-header">
+						<h:outputLabel value="Operador" />
+					</p:column>
+				</p:row>
+
+				<p:row>
+					<p:column colspan="4">
+						<h:outputText value="#{chamadoMB.chamado.operadores}" />
+					</p:column>
+				</p:row>
+
 			</p:panelGrid>
 			<p:panelGrid>
 				<p:commandButton value="Fechar"
