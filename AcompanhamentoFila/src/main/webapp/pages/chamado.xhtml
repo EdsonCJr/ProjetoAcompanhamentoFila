@@ -31,25 +31,8 @@
 					<h:outputText value="#{chamado.dataAbertura}" />
 				</p:column>
 
-				<p:column headerText="Status chamado"
-					filterBy="#{chamado.statusChamado}">
-					<f:facet name="filter">
-						<p:selectOneMenu onchange="PF('tblChamado').filter()" >
-							<f:selectItem itemLabel="Selecione um status"
-								noSelectionOption="true" />
-							<f:selectItems value="#{chamado.statusChamado}" />
-							<!--
-							<f:selectItem itemLabel="Aguardando intervenção"
-								itemValue="Aguardando intervenção" />
-							<f:selectItem itemLabel="Aguardando Retorno do Usuário"
-								itemValue="Aguardando Retorno do Usuário" />
-							<f:selectItem itemLabel="Atribuido" itemValue="Atribuido" />
-							<f:selectItem itemLabel="Designado" itemValue="Designado" />
-							<f:selectItem itemLabel="Reatribuido" itemValue="Reatribuido" />
-							-->
-						</p:selectOneMenu>
-					</f:facet>
-					<h:outputText value="#{chamado.statusChamado}" />
+				<p:column headerText="Status chamado">
+					<h:outputText value="#{chamado.statusChamado.toString()}" />
 				</p:column>
 
 				<p:column headerText="Setor Abertura">
@@ -61,7 +44,7 @@
 				</p:column>
 
 				<p:column headerText="Operadores" filterBy="">
-					<h:outputText value="#{chamado.operadores}" />
+					<h:outputText value="#{chamado.operadores.nome}" />
 				</p:column>
 
 				<p:column headerText="Vencimento SLA">
@@ -239,7 +222,7 @@
 
 				<p:row>
 					<p:column colspan="4">
-						<h:outputText value="#{chamadoMB.chamado.operadores}" />
+						<h:outputText value="#{chamadoMB.chamado.operadores.nome}" />
 					</p:column>
 				</p:row>
 

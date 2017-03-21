@@ -6,38 +6,14 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<h:outputStylesheet library="css" name="indexStyle.css"/>
 	<title>.::Index::.</title>
 </h:head>
 <h:body>
-	<p:layout fullPage="true">
-		<p:layoutUnit position="north" size="100">
-
-		</p:layoutUnit>
-
-		<p:layoutUnit position="west" resizable="true" collapsible="true"
-			header="Menu" size="250">
-			<h:form>
-				<p:menu toggleable="true">
-					<p:submenu label="Chamados">
-						<p:menuitem value="Upload da planilha"/>
-						<p:menuitem value="Lista de chamados"/>
-					</p:submenu>
-					
-					<p:submenu label="Visões">
-					<p:menuitem value="op1"/>
-					<p:menuitem value="op2"/>
-					</p:submenu>
-				</p:menu>
-			</h:form>
-		</p:layoutUnit>
-
-		<p:layoutUnit position="center">
-
-		</p:layoutUnit>
-
-		<p:layoutUnit position="south" size="50">
-
-		</p:layoutUnit>
-	</p:layout>
+	<div id="container">
+		<div id="navbar"><p>Topo</p></div>
+		<div id="menu"><p>Menu</p></div>
+		<div id="contents"><p>Conteudo</p></div>
+	</div>
 </h:body>
 </html>

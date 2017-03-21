@@ -20,13 +20,17 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 
 import org.omnifaces.util.Messages;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
 import br.com.acompanhamentofila.dao.ChamadoDAO;
+import br.com.acompanhamentofila.dao.OperadorDAO;
 import br.com.acompanhamentofila.domain.Chamado;
+import br.com.acompanhamentofila.domain.Operador;
+import br.com.acompanhamentofila.enumeration.StatusChamado;
 
 @SuppressWarnings("serial")
 @ManagedBean(name = "chamadoMB")
@@ -34,6 +38,7 @@ import br.com.acompanhamentofila.domain.Chamado;
 public class ChamadoBean implements Serializable {
 
 	private Chamado chamado;
+	private Operador operador;
 	private List<Chamado> listaDeChamados;
 
 	public void setChamado(Chamado chamado) {
@@ -42,6 +47,14 @@ public class ChamadoBean implements Serializable {
 
 	public Chamado getChamado() {
 		return chamado;
+	}
+
+	public void setOperador(Operador operador) {
+		this.operador = operador;
+	}
+
+	public Operador getOperador() {
+		return operador;
 	}
 
 	public List<Chamado> getListaDeChamados() {
@@ -54,6 +67,7 @@ public class ChamadoBean implements Serializable {
 
 	public void novo() {
 		chamado = new Chamado();
+		operador = new Operador();
 	}
 
 	public void carregar() {
@@ -92,6 +106,7 @@ public class ChamadoBean implements Serializable {
 		 * Criando um obj de acesso ao bando de dados
 		 */
 		ChamadoDAO chamadoDAO = new ChamadoDAO();
+		OperadorDAO operadorDAO = new OperadorDAO();
 
 		/*
 		 * Criando um obj File apontando para o arquivo .csv utilizano o caminho
@@ -124,7 +139,7 @@ public class ChamadoBean implements Serializable {
 
 			/*
 			 * Criando duas lista de obj Chamado oldList contém os chamados que
-			 * já estão gravados (salvos) no bando de dados newList receberá os
+			 * já estão gravados (salvos) no banco de dados newList receberá os
 			 * chamados do arquivo que será importado
 			 */
 			List<Chamado> oldList = new ArrayList<>();
@@ -177,7 +192,29 @@ public class ChamadoBean implements Serializable {
 					chamado.setDataAbertura(dtAbertura);
 				}
 
-				String statusChamado = values[2].replaceAll("\"", "");
+				String statChamado = values[2].replaceAll("\"", "");
+
+				switch (statChamado) {
+
+				case "Aguardando intervenção":
+					chamado.setStatusChamado(StatusChamado.AGUARDANDO_INTERVENCAO);
+
+				case "Aguardando Retorno do Usuário":
+					chamado.setStatusChamado(StatusChamado.AGUARDANDO_RETORNO_DO_USUARIO);
+
+				case "Designado":
+					chamado.setStatusChamado(StatusChamado.DESIGNADO);
+
+				case "Atribuido":
+					chamado.setStatusChamado(StatusChamado.ATRIBUIDO);
+
+				case "Em processamento":
+					chamado.setStatusChamado(StatusChamado.EM_PROCESSAMENTO);
+
+				case "Reatribuido":
+					chamado.setStatusChamado(StatusChamado.REATRIBUIDO);
+
+				}
 
 				String codigoCliente = values[3].replaceAll("\"", "");
 
@@ -203,7 +240,15 @@ public class ChamadoBean implements Serializable {
 
 				String ultimaSolicitacao = values[11].replaceAll("\"", "");
 
-				String operadores = values[12].replaceAll("\"", "");
+				if (values[12].isEmpty()) {
+					operador = operadorDAO.buscarOperadorPorNome("Sem operador");
+					chamado.setOperadores(operador);
+
+				} else {
+					String operadores = values[12].replaceAll("\"", "");
+					operador = operadorDAO.buscarOperadorPorNome(operadores);
+					chamado.setOperadores(operador);
+				}
 
 				if (values[13].isEmpty()) {
 					Date vencimanentoSLA = null;
@@ -217,12 +262,12 @@ public class ChamadoBean implements Serializable {
 
 				/*
 				 * Setando os valores das variáveis criadas acima no obj
-				 * chamado. Note que as datas de dtUltimaResponsabilidade e
-				 * vencimanentoSLA foram setadas nas condições acima.
+				 * chamado. Note que a data de abertura, status do chamado,
+				 * dtUltimaResponsabilidade, operador e vencimanentoSLA foram
+				 * setadas nas condições acima.
 				 */
 
 				chamado.setNumeroChamado(numCh);
-				chamado.setStatusChamado(statusChamado);
 				chamado.setCodigoCliente(codigoCliente);
 				chamado.setNomeCliente(nomeCliente);
 				chamado.setSetorAbertura(setorAbertura);
@@ -231,7 +276,6 @@ public class ChamadoBean implements Serializable {
 				chamado.setDescricaoProblema(descricaoProblema);
 				chamado.setUltimaIntervecao(ultimaIntervenção);
 				chamado.setUltimaSolicitacao(ultimaSolicitacao);
-				chamado.setOperadores(operadores);
 				chamado.setVisibilidade(visibilidade);
 
 				/*
@@ -243,8 +287,6 @@ public class ChamadoBean implements Serializable {
 				 * Salvando os chamados no banco de dados
 				 */
 				chamadoDAO.merge(chamado);
-				
-				
 
 			}
 			scanner.close();
@@ -263,9 +305,9 @@ public class ChamadoBean implements Serializable {
 			List<Chamado> tmpList = new ArrayList<>();
 			tmpList.addAll(oldList);
 			tmpList.removeAll(newList);
-			
+
 			chamadoDAO.fecharChamado(tmpList);
-			
+
 			listaDeChamados = chamadoDAO.listarChamadosAbertos();
 
 		} catch (IOException | ParseException | RuntimeException exception) {
@@ -291,7 +333,6 @@ public class ChamadoBean implements Serializable {
 		try {
 			ChamadoDAO chamadoDao = new ChamadoDAO();
 			listaDeChamados = chamadoDao.listarChamadosAbertos();
-
 		} catch (RuntimeException e) {
 			Messages.addGlobalError("Ocorreu um erro ao listar os chamados");
 			e.printStackTrace();

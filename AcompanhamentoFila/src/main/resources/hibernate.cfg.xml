@@ -14,7 +14,7 @@
 		<property name="connection.password">bdStefanini#01</property>
 
 		<!-- Pool de Conexões -->
-		<property name="connection.pool_size">1</property>
+		<property name="connection.pool_size">3</property>
 
 		<!-- SQL dialect -->
 		<property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
@@ -29,10 +29,11 @@
 		<property name="show_sql">true</property>
 
 		<!-- Cria as tabelas do banco de dados três opções create/update/validate -->
-		<property name="hbm2ddl.auto">validate</property>
+		<property name="hbm2ddl.auto">update</property>
 		
 		<!-- Mapeamento das entidades -->
 		<mapping class="br.com.acompanhamentofila.domain.Chamado"/>
+		<mapping class="br.com.acompanhamentofila.domain.Operador"/>
 	</session-factory>
 
 </hibernate-configuration>
