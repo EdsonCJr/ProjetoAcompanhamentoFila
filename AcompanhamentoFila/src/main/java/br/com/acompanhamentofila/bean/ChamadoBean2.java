@@ -27,12 +27,12 @@ public class ChamadoBean2 implements Serializable {
 	List<Operador> listaDeOperadores = new ArrayList<>();
 	List<Chamado> listaDeChamados = new ArrayList<>();
 
-	
-	
+	private Boolean exibeDataTable;
+
 	public void setOperador(Operador operador) {
 		this.operador = operador;
 	}
-	
+
 	public Operador getOperador() {
 		return operador;
 	}
@@ -44,20 +44,28 @@ public class ChamadoBean2 implements Serializable {
 	public List<Operador> getListaDeOperadores() {
 		return listaDeOperadores;
 	}
-	
+
 	public void setListaDeChamados(List<Chamado> listaDeChamados) {
 		this.listaDeChamados = listaDeChamados;
 	}
-	
+
 	public List<Chamado> getListaDeChamados() {
 		return listaDeChamados;
 	}
-	
+
+	public void setExibeDataTable(Boolean exibeDataTable) {
+		this.exibeDataTable = exibeDataTable;
+	}
+
+	public Boolean getExibeDataTable() {
+		return exibeDataTable;
+	}
 
 	@PostConstruct
 	public void novo() {
 		operador = new Operador();
 		carregarOperadores();
+		setExibeDataTable(false);
 	}
 
 	public void carregarOperadores() {
@@ -70,21 +78,31 @@ public class ChamadoBean2 implements Serializable {
 			exception.printStackTrace();
 		}
 	}
-	
-	public void listaDeChamadosPorOperador(ValueChangeEvent event){
-		
-		long codOperador = (long) event.getNewValue();
-		operador.setCodigo(codOperador);
+
+	public void listaDeChamadosPorOperador(ValueChangeEvent event) {
+
+		if(event.getNewValue() == null){
+		} else{
+			long codOperador = (long) event.getNewValue();
+			operador.setCodigo(codOperador);
+		}
 		ChamadoDAO chamadoDAO = new ChamadoDAO();
-		try{
-			
-			listaDeChamados = chamadoDAO.listaDeChamadosPorOperador(operador);			
-			
-		} catch(RuntimeException exception){
+		try {
+
+			listaDeChamados = chamadoDAO.listaDeChamadosPorOperador(operador);
+
+			if (listaDeChamados.isEmpty()) {
+				setExibeDataTable(false);
+				Messages.addGlobalWarn("O operaro selecionado não possui chamados em backlog");
+			} else {
+				setExibeDataTable(true);
+			}
+
+		} catch (RuntimeException exception) {
 			Messages.addGlobalError("Ocorreu um erro listar os chamados");
 			exception.printStackTrace();
 		}
-		
+
 	}
-	
+
 }
