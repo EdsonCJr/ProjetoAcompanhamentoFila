@@ -13,13 +13,14 @@
 
 	<p:growl id="mensagem" />
 
-	<h:form>
+	<h:form id="fmrListaChamado">
 
 		<p:panelGrid columns="2">
 
 			<p:outputLabel for="op" value="Operador" />
 			<p:selectOneMenu id="op" value="#{chamadoMB2.operador.codigo}"
-				onchange="submit()" valueChangeListener="#{chamadoMB2.recebeOperador}"
+				onchange="submit()"
+				valueChangeListener="#{chamadoMB2.listaDeChamadosPorOperador}"
 				converter="omnifaces.SelectItemsConverter">
 				<f:selectItem itemLabel="Selecione um operador" itemValue="null"
 					noSelectionOption="true" />
@@ -29,6 +30,39 @@
 			</p:selectOneMenu>
 
 		</p:panelGrid>
+
+		<p:panel header="Lista de Chamados">
+			<p:dataTable id="dtChamado" value="#{chamadoMB2.listaDeChamados}"
+				var="chamado" rows="10" paginator="true" paginatorPosition="bottom">
+				<p:column headerText="Número do chamado">
+				<h:outputText value="#{chamado.numeroChamado}" />
+				</p:column>
+
+				<p:column headerText="Data de abertura">
+				<h:outputText value="#{chamado.dataAbertura}" />
+				</p:column>
+
+				<p:column headerText="Status do chamado">
+				<h:outputText value="#{chamado.statusChamado.toString()}" />
+				</p:column>
+
+				<p:column headerText="Setor de abertura">
+				<h:outputText value="#{chamado.setorAbertura}" />
+				</p:column>
+
+				<p:column headerText="Criticidade">
+				<h:outputText value="#{chamado.criticidade}" />
+				</p:column>
+
+				<p:column headerText="Vencimento do SLA">
+				<h:outputText value="#{chamado.vencimentoSla}" />
+				</p:column>
+
+			</p:dataTable>
+		</p:panel>
+		
+		<p:dialog >
+		</p:dialog>
 
 	</h:form>
 </h:body>

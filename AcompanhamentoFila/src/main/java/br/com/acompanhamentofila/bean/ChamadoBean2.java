@@ -25,6 +25,7 @@ public class ChamadoBean2 implements Serializable {
 	Operador operador = null;
 
 	List<Operador> listaDeOperadores = new ArrayList<>();
+	List<Chamado> listaDeChamados = new ArrayList<>();
 
 	
 	
@@ -42,6 +43,14 @@ public class ChamadoBean2 implements Serializable {
 
 	public List<Operador> getListaDeOperadores() {
 		return listaDeOperadores;
+	}
+	
+	public void setListaDeChamados(List<Chamado> listaDeChamados) {
+		this.listaDeChamados = listaDeChamados;
+	}
+	
+	public List<Chamado> getListaDeChamados() {
+		return listaDeChamados;
 	}
 	
 
@@ -62,8 +71,20 @@ public class ChamadoBean2 implements Serializable {
 		}
 	}
 	
-	public void recebeOperador(ValueChangeEvent event){
-		System.out.println("Código do Operador: "+event.getNewValue());
+	public void listaDeChamadosPorOperador(ValueChangeEvent event){
+		
+		long codOperador = (long) event.getNewValue();
+		operador.setCodigo(codOperador);
+		ChamadoDAO chamadoDAO = new ChamadoDAO();
+		try{
+			
+			listaDeChamados = chamadoDAO.listaDeChamadosPorOperador(operador);			
+			
+		} catch(RuntimeException exception){
+			Messages.addGlobalError("Ocorreu um erro listar os chamados");
+			exception.printStackTrace();
+		}
+		
 	}
 	
 }

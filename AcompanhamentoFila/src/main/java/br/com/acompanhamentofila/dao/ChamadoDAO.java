@@ -2,13 +2,16 @@ package br.com.acompanhamentofila.dao;
 
 import java.util.List;
 
+import javax.persistence.JoinColumn;
+import javax.persistence.criteria.Expression;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import br.com.acompanhamentofila.domain.Chamado;
+import br.com.acompanhamentofila.domain.Operador;
 import br.com.acompanhamentofila.enumeration.StatusChamado;
 import br.com.acompanhamentofila.util.HibernateUtil;
 
@@ -66,28 +69,46 @@ public class ChamadoDAO extends GenericDAO<Chamado> {
 		}
 	}
 
-	public List<String> listaDeOperadores() {
+	public List<Chamado> listaDeChamadosPorOperador(Operador op) {
+		ChamadoDAO chamadoDAO = new ChamadoDAO();
 		Session session = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
-			Criteria query = session.createCriteria(Chamado.class);
-			query.setProjection(
-					Projections.distinct(Projections.projectionList().add(Projections.property("operadores"))));
-
-			List<String> opList = query.list();
 			/*
-			 * List<Chamado> chList = new ArrayList<>();
+			 * O parâmetro "operadores" em query.createCriteria se refere ao
+			 * atributo operadores da classe Chamado, que no banco de dados está
+			 * definido como "operador_codigo" definido pela anotação
 			 * 
-			 * for (String op : opList) { Chamado ch = new Chamado();
-			 * ch.setOperadores(op); chList.add(ch); }
+			 * @JoinColumn(name ="") também da classe Chamado, para o criteria
+			 * considetar o nome do atributo da clase, ou seja, "operadores"
 			 */
+			Criteria query = session.createCriteria(Chamado.class);
+			query.createCriteria("operadores").add(Restrictions.idEq(op.getCodigo()));
 
-			return opList;
+			List<Chamado> listaDeChamados = query.list();
 
+			return listaDeChamados;
 		} catch (RuntimeException exception) {
 			throw exception;
 		} finally {
 			session.close();
 		}
+
 	}
+
+	/*
+	 * public List<String> listaDeOperadores() { Session session =
+	 * HibernateUtil.getFabricaDeSessoes().openSession(); try { Criteria query =
+	 * session.createCriteria(Chamado.class); query.setProjection(
+	 * Projections.distinct(Projections.projectionList().add(Projections.
+	 * property("operadores"))));
+	 * 
+	 * List<String> opList = query.list();
+	 * 
+	 * 
+	 * return opList;
+	 * 
+	 * } catch (RuntimeException exception) { throw exception; } finally {
+	 * session.close(); } }
+	 */
 
 }
