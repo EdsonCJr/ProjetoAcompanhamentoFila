@@ -18,23 +18,37 @@
 		<p:panelGrid columns="2">
 
 			<p:outputLabel for="op" value="Operador" />
+
 			<p:selectOneMenu id="op" value="#{chamadoMB2.operador.codigo}"
 				onchange="submit()"
 				valueChangeListener="#{chamadoMB2.listaDeChamadosPorOperador}"
 				converter="omnifaces.SelectItemsConverter">
 				<f:selectItem itemLabel="Selecione um operador"
-					noSelectionOption="true" />
+					noSelectionOption="true" itemValue="#{null}" />
 				<f:selectItems value="#{chamadoMB2.listaDeOperadores}"
 					var="operador" itemLabel="#{operador.nome}"
 					itemValue="#{operador.codigo}" />
 			</p:selectOneMenu>
 
+
 		</p:panelGrid>
 
 		<h:panelGroup layout="block" rendered="#{chamadoMB2.exibeDataTable}">
 			<p:panel header="Lista de Chamados">
-				<p:dataTable id="dtChamado" value="#{chamadoMB2.listaDeChamados}"
-					var="chamado" rows="10" paginator="true" paginatorPosition="bottom">
+				<p:dataTable id="dtChamado" var="chamado"
+					value="#{chamadoMB2.listaDeChamados}" selectionMode="single"
+					selection="#{chamadoMB2.chamadoSelecionado}"
+					rowKey="#{chamado.numeroChamado}" rows="10" paginator="true"
+					paginatorPosition="bottom">
+
+					<p:ajax event="rowSelect" listener="#{chamadoMB2.onRowSelect}"
+						oncomplete="PF('dlgChamado').show();"
+						update=":fmrListaChamado:fmrChamado:painelChamado" />
+
+					<!-- 
+					<p:ajax event="rowUnselect" listener="#{chamadoMB2.onRowUnselect}" />
+					 -->
+
 					<p:column headerText="Número do chamado">
 						<h:outputText value="#{chamado.numeroChamado}" />
 					</p:column>
@@ -62,9 +76,165 @@
 				</p:dataTable>
 			</p:panel>
 		</h:panelGroup>
-		<p:dialog>
-		</p:dialog>
 
+
+
+		<p:dialog header="Detalhes do chamado" widgetVar="dlgChamado"
+			draggable="false" resizable="false" modal="true" showEffect="fade"
+			hideEffect="fade" width="500px" height="500px">
+
+			<h:form id="fmrChamado">
+				<p:panelGrid id="painelChamado">
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="4">
+								<h:outputLabel value="Informações do chamado" />
+							</p:column>
+						</p:row>
+					</f:facet>
+
+					<p:row>
+						<p:column>
+							<h:outputLabel value="Número do Chamado" />
+						</p:column>
+						<p:column>
+							<h:outputLabel value="Status do Chamado" />
+						</p:column>
+						<p:column>
+							<h:outputLabel value="Criticidade" />
+						</p:column>
+						<p:column>
+							<h:outputLabel value="Vencimanento SLA" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText
+								value="#{chamadoMB2.chamadoSelecionado.numeroChamado}" />
+						</p:column>
+						<p:column>
+							<h:outputText
+								value="#{chamadoMB2.chamadoSelecionado.statusChamado}" />
+						</p:column>
+						<p:column>
+							<h:outputText
+								value="#{chamadoMB2.chamadoSelecionado.criticidade}" />
+						</p:column>
+						<p:column>
+							<h:outputText
+								value="#{chamadoMB2.chamadoSelecionado.vencimentoSla}" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4">
+							<p:spacer height="0" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4" styleClass="ui-widget-header">
+							<h:outputLabel value="Informações do usuário" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel value="Código do Cliente" />
+						</p:column>
+						<p:column>
+							<h:outputLabel value="Nome do Cliente" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText
+								value="#{chamadoMB2.chamadoSelecionado.codigoCliente}" />
+						</p:column>
+						<p:column>
+							<h:outputText
+								value="#{chamadoMB2.chamadoSelecionado.nomeCliente}" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4">
+							<p:spacer height="0" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4" styleClass="ui-widget-header">
+							<h:outputLabel value="Informações do sistema" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<h:outputLabel value="Setor de Abertura" />
+						</p:column>
+						<p:column>
+							<h:outputLabel value="Problema Abertura" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<h:outputText
+								value="#{chamadoMB2.chamadoSelecionado.setorAbertura}" />
+						</p:column>
+						<p:column>
+							<h:outputText
+								value="#{chamadoMB2.chamadoSelecionado.problemaAbertura}" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4">
+							<p:spacer height="0" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4" styleClass="ui-widget-header">
+							<h:outputLabel value="Descrição Problema" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4" resizable="false">
+							<h:outputText
+								value="#{chamadoMB2.chamadoSelecionado.descricaoProblema}" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4">
+							<p:spacer height="0" />
+						</p:column>
+					</p:row>
+
+
+					<p:row>
+						<p:column colspan="4" styleClass="ui-widget-header">
+							<h:outputLabel value="Operador" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column colspan="4">
+							<h:outputText
+								value="#{chamadoMB2.chamadoSelecionado.operadores.nome}" />
+						</p:column>
+					</p:row>
+
+				</p:panelGrid>
+				<p:panelGrid>
+					<p:commandButton value="Fechar"
+						oncomplete="PF('dlgChamado').hide();" />
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
 	</h:form>
 </h:body>
 

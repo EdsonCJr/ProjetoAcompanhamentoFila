@@ -7,10 +7,11 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangeEvent;
 
 import org.omnifaces.util.Messages;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 import br.com.acompanhamentofila.dao.ChamadoDAO;
 import br.com.acompanhamentofila.dao.OperadorDAO;
@@ -23,6 +24,7 @@ import br.com.acompanhamentofila.domain.Operador;
 public class ChamadoBean2 implements Serializable {
 
 	Operador operador = null;
+	Chamado chamadoSelecionado = null;
 
 	List<Operador> listaDeOperadores = new ArrayList<>();
 	List<Chamado> listaDeChamados = new ArrayList<>();
@@ -35,6 +37,14 @@ public class ChamadoBean2 implements Serializable {
 
 	public Operador getOperador() {
 		return operador;
+	}
+
+	public void setChamadoSelecionado(Chamado chamadoSelecionado) {
+		this.chamadoSelecionado = chamadoSelecionado;
+	}
+
+	public Chamado getChamadoSelecionado() {
+		return chamadoSelecionado;
 	}
 
 	public void setListaDeOperadores(List<Operador> listaDeOperadores) {
@@ -64,6 +74,7 @@ public class ChamadoBean2 implements Serializable {
 	@PostConstruct
 	public void novo() {
 		operador = new Operador();
+		chamadoSelecionado = new Chamado();
 		carregarOperadores();
 		setExibeDataTable(false);
 	}
@@ -81,8 +92,9 @@ public class ChamadoBean2 implements Serializable {
 
 	public void listaDeChamadosPorOperador(ValueChangeEvent event) {
 
-		if(event.getNewValue() == null){
-		} else{
+		if (event.getNewValue() == null) {
+			setExibeDataTable(false);
+		} else {
 			long codOperador = (long) event.getNewValue();
 			operador.setCodigo(codOperador);
 		}
@@ -93,7 +105,7 @@ public class ChamadoBean2 implements Serializable {
 
 			if (listaDeChamados.isEmpty()) {
 				setExibeDataTable(false);
-				Messages.addGlobalWarn("O operaro selecionado não possui chamados em backlog");
+				Messages.addGlobalWarn("O operador selecionado não possui chamados em backlog");
 			} else {
 				setExibeDataTable(true);
 			}
@@ -104,5 +116,17 @@ public class ChamadoBean2 implements Serializable {
 		}
 
 	}
+
+	public void onRowSelect(SelectEvent event) {
+		chamadoSelecionado = (Chamado) event.getObject();
+	}
+
+	/*
+	 * Método inatico, pois não esta sendo utilizado, mas está presente na
+	 * documentação do primefaces (showcase), caso necessário será ativo.
+	 * 
+	 * public void onRowUnselect(UnselectEvent event) { chamadoSelecionado =
+	 * (Chamado) event.getObject(); }
+	 */
 
 }

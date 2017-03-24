@@ -14,13 +14,19 @@
 	<h:form id="fmrcallList">
 		<p:panel header="Lista de chamados">
 			<p:dataTable id="tblChamado" paginator="true"
-				value="#{chamadoMB.listaDeChamados}" var="chamado" rows="10"
-				paginatorPosition="bottom">
+				value="#{chamadoMB.listaDeChamados}" var="chamado"
+				selectionMode="single" selection="#{chamadoMB.chamadoSelecionado}"
+				rowKey="#{chamado.numeroChamado}" rows="10"
+				paginatorPosition="bottom" widgetVar="dtChamado" filteredValue="#{chamadoMB.listaDeChamados}">
 				<f:facet name="header">
 					<p:commandButton value="Upload"
 						oncomplete="PF('uplArquivo').show();"
 						actionListener="#{chamadoMB.novo}" />
 				</f:facet>
+
+				<p:ajax event="rowSelect" listener="#{chamadoMB.onRowSelect}"
+					update=":fmrChamado:painelChamado"
+					oncomplete="PF('dlgChamado').show();" />
 
 				<p:column headerText="Número chamado"
 					sortBy="#{chamado.numeroChamado}">
@@ -43,7 +49,14 @@
 					<h:outputText value="#{chamado.criticidade}" />
 				</p:column>
 
-				<p:column headerText="Operadores" filterBy="">
+				<p:column headerText="Operadores"
+					filterBy="#{chamado.operadores.nome}" filterMatchMode="exact">
+					<f:facet name="filter">
+						<p:selectOneMenu onchange="PF('dtChamado').filter()">
+						<f:selectItem itemLabel="Selecione um operador" itemValue="#{null}" noSelectionOption="true"/>
+						<f:selectItems value="#{chamadoMB.operador.nome}"/>
+						</p:selectOneMenu>
+					</f:facet>
 					<h:outputText value="#{chamado.operadores.nome}" />
 				</p:column>
 
@@ -51,6 +64,10 @@
 					<h:outputText value="#{chamado.vencimentoSla}" />
 				</p:column>
 
+				<!--
+				Coluna com a opção de um ícone para visualizar os dados do chamado, caso esse opção seja preferida
+				o dialogo Detalhes do chamado widgetVar="dlgChamado" deve ter o objeto alterado.
+				  
 				<p:column>
 					<p:commandButton icon="ui-icon-search"
 						actionListener="#{chamadoMB.visualizar}"
@@ -59,6 +76,7 @@
 						<f:attribute name="chamadoSelecionado" value="#{chamado}" />
 					</p:commandButton>
 				</p:column>
+				-->
 
 			</p:dataTable>
 		</p:panel>
@@ -87,6 +105,9 @@
 
 	</p:dialog>
 
+	<!-- Caso a opção de utilizar a coluna com o ícone para visualização do chamado seja preferida
+		o obj 'chamadoSelecionado' deve ser substituido por 'chamado'
+	 -->
 	<p:dialog header="Detalhes do chamado" widgetVar="dlgChamado"
 		draggable="false" resizable="false" modal="true" showEffect="fade"
 		hideEffect="fade" width="500px" height="500px">
@@ -118,16 +139,19 @@
 
 				<p:row>
 					<p:column>
-						<h:outputText value="#{chamadoMB.chamado.numeroChamado}" />
+						<h:outputText
+							value="#{chamadoMB.chamadoSelecionado.numeroChamado}" />
 					</p:column>
 					<p:column>
-						<h:outputText value="#{chamadoMB.chamado.statusChamado}" />
+						<h:outputText
+							value="#{chamadoMB.chamadoSelecionado.statusChamado}" />
 					</p:column>
 					<p:column>
-						<h:outputText value="#{chamadoMB.chamado.criticidade}" />
+						<h:outputText value="#{chamadoMB.chamadoSelecionado.criticidade}" />
 					</p:column>
 					<p:column>
-						<h:outputText value="#{chamadoMB.chamado.vencimentoSla}" />
+						<h:outputText
+							value="#{chamadoMB.chamadoSelecionado.vencimentoSla}" />
 					</p:column>
 				</p:row>
 
@@ -153,10 +177,11 @@
 
 				<p:row>
 					<p:column>
-						<h:outputText value="#{chamadoMB.chamado.codigoCliente}" />
+						<h:outputText
+							value="#{chamadoMB.chamadoSelecionado.codigoCliente}" />
 					</p:column>
 					<p:column>
-						<h:outputText value="#{chamadoMB.chamado.nomeCliente}" />
+						<h:outputText value="#{chamadoMB.chamadoSelecionado.nomeCliente}" />
 					</p:column>
 				</p:row>
 
@@ -182,10 +207,12 @@
 
 				<p:row>
 					<p:column>
-						<h:outputText value="#{chamadoMB.chamado.setorAbertura}" />
+						<h:outputText
+							value="#{chamadoMB.chamadoSelecionado.setorAbertura}" />
 					</p:column>
 					<p:column>
-						<h:outputText value="#{chamadoMB.chamado.problemaAbertura}" />
+						<h:outputText
+							value="#{chamadoMB.chamadoSelecionado.problemaAbertura}" />
 					</p:column>
 				</p:row>
 
@@ -203,7 +230,8 @@
 
 				<p:row>
 					<p:column colspan="4" resizable="false">
-						<h:outputText value="#{chamadoMB.chamado.descricaoProblema}" />
+						<h:outputText
+							value="#{chamadoMB.chamadoSelecionado.descricaoProblema}" />
 					</p:column>
 				</p:row>
 
@@ -222,7 +250,8 @@
 
 				<p:row>
 					<p:column colspan="4">
-						<h:outputText value="#{chamadoMB.chamado.operadores.nome}" />
+						<h:outputText
+							value="#{chamadoMB.chamadoSelecionado.operadores.nome}" />
 					</p:column>
 				</p:row>
 

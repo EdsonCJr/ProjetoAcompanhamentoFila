@@ -24,6 +24,7 @@ import javax.faces.event.ValueChangeEvent;
 
 import org.omnifaces.util.Messages;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.UploadedFile;
 
 import br.com.acompanhamentofila.dao.ChamadoDAO;
@@ -38,6 +39,7 @@ import br.com.acompanhamentofila.enumeration.StatusChamado;
 public class ChamadoBean implements Serializable {
 
 	private Chamado chamado;
+	private Chamado chamadoSelecionado;
 	private Operador operador;
 	private List<Chamado> listaDeChamados;
 
@@ -47,6 +49,14 @@ public class ChamadoBean implements Serializable {
 
 	public Chamado getChamado() {
 		return chamado;
+	}
+
+	public void setChamadoSelecionado(Chamado chamadoSelecionado) {
+		this.chamadoSelecionado = chamadoSelecionado;
+	}
+
+	public Chamado getChamadoSelecionado() {
+		return chamadoSelecionado;
 	}
 
 	public void setOperador(Operador operador) {
@@ -317,16 +327,20 @@ public class ChamadoBean implements Serializable {
 
 	}
 
-	public void visualizar(ActionEvent event) {
-		try {
-
-			chamado = (Chamado) event.getComponent().getAttributes().get("chamadoSelecionado");
-
-		} catch (RuntimeException exception) {
-			Messages.addGlobalError("Ocorreu um erro ao selecionar o chamado.");
-			exception.printStackTrace();
-		}
-	}
+	/*
+	 * Método utilizado para visualizar os dados completos do chamado
+	 * pela coluna Visualizar, caso a opção do ícone seja preferida 
+	 * esse método deve ser ativado (descomentado)
+	 * 
+	 * public void visualizar(ActionEvent event) { try {
+	 * 
+	 * chamado = (Chamado)
+	 * event.getComponent().getAttributes().get("chamadoSelecionado");
+	 * 
+	 * } catch (RuntimeException exception) {
+	 * Messages.addGlobalError("Ocorreu um erro ao selecionar o chamado.");
+	 * exception.printStackTrace(); } }
+	 */
 
 	@PostConstruct
 	public void listar() {
@@ -371,6 +385,10 @@ public class ChamadoBean implements Serializable {
 			Messages.addGlobalError("Ocorreu um erro ao fazer o upload do arquivo");
 			exception.printStackTrace();
 		}
+	}
+
+	public void onRowSelect(SelectEvent event) {
+		chamadoSelecionado = (Chamado) event.getObject();
 	}
 
 }
