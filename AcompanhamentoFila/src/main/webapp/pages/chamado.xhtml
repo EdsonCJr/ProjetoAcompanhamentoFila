@@ -11,13 +11,17 @@
 </h:head>
 <h:body>
 	<p:growl id="mensagem" />
+
 	<h:form id="fmrcallList">
+
 		<p:panel header="Lista de chamados">
+
 			<p:dataTable id="tblChamado" paginator="true"
 				value="#{chamadoMB.listaDeChamados}" var="chamado"
 				selectionMode="single" selection="#{chamadoMB.chamadoSelecionado}"
 				rowKey="#{chamado.numeroChamado}" rows="10"
-				paginatorPosition="bottom" widgetVar="dtChamado" filteredValue="#{chamadoMB.listaDeChamados}">
+				paginatorPosition="bottom" widgetVar="dtChamado">
+
 				<f:facet name="header">
 					<p:commandButton value="Upload"
 						oncomplete="PF('uplArquivo').show();"
@@ -50,11 +54,13 @@
 				</p:column>
 
 				<p:column headerText="Operadores"
-					filterBy="#{chamado.operadores.nome}" filterMatchMode="exact">
+					filterBy="#{chamado.operadores.nome}" filterMatchMode="contains">
 					<f:facet name="filter">
-						<p:selectOneMenu onchange="PF('dtChamado').filter()">
-						<f:selectItem itemLabel="Selecione um operador" itemValue="#{null}" noSelectionOption="true"/>
-						<f:selectItems value="#{chamadoMB.operador.nome}"/>
+						<p:selectOneMenu>
+							<f:selectItem itemLabel="Selecione um operador"
+								itemValue="#{null}" noSelectionOption="true" />
+							<f:selectItems value="#{chamadoMB.listaDeOperadores}"
+								var="operador" itemLabel="#{operador.nome}" itemValue="#{operador.nome}" />
 						</p:selectOneMenu>
 					</f:facet>
 					<h:outputText value="#{chamado.operadores.nome}" />
@@ -79,6 +85,7 @@
 				-->
 
 			</p:dataTable>
+
 		</p:panel>
 
 	</h:form>

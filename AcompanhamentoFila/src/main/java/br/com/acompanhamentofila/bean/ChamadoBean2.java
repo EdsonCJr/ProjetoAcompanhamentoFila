@@ -122,7 +122,7 @@ public class ChamadoBean2 implements Serializable {
 	}
 
 	/*
-	 * Método inatico, pois não esta sendo utilizado, mas está presente na
+	 * Método inativo, pois não esta sendo utilizado, mas está presente na
 	 * documentação do primefaces (showcase), caso necessário será ativo.
 	 * 
 	 * public void onRowUnselect(UnselectEvent event) { chamadoSelecionado =

@@ -42,6 +42,7 @@ public class ChamadoBean implements Serializable {
 	private Chamado chamadoSelecionado;
 	private Operador operador;
 	private List<Chamado> listaDeChamados;
+	private List<Operador> listaDeOperadores;
 
 	public void setChamado(Chamado chamado) {
 		this.chamado = chamado;
@@ -73,6 +74,14 @@ public class ChamadoBean implements Serializable {
 
 	public void setListaDeChamados(List<Chamado> listaDeChamados) {
 		this.listaDeChamados = listaDeChamados;
+	}
+	
+	public void setListaDeOperadores(List<Operador> listaDeOperadores) {
+		this.listaDeOperadores = listaDeOperadores;
+	}
+	
+	public List<Operador> getListaDeOperadores() {
+		return listaDeOperadores;
 	}
 
 	public void novo() {
@@ -344,6 +353,7 @@ public class ChamadoBean implements Serializable {
 
 	@PostConstruct
 	public void listar() {
+		carregaOperadores();
 		try {
 			ChamadoDAO chamadoDao = new ChamadoDAO();
 			listaDeChamados = chamadoDao.listarChamadosAbertos();
@@ -389,6 +399,17 @@ public class ChamadoBean implements Serializable {
 
 	public void onRowSelect(SelectEvent event) {
 		chamadoSelecionado = (Chamado) event.getObject();
+	}
+	
+	public void carregaOperadores(){
+		OperadorDAO operadorDAO = new OperadorDAO();
+		try {
+			listaDeOperadores = operadorDAO.listar();
+
+		} catch (RuntimeException exception) {
+			Messages.addGlobalError("Ocorreou um erro ao carregar a lista de operadores");
+			exception.printStackTrace();
+		}
 	}
 
 }
