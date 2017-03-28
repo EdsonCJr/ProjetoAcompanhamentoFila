@@ -1,9 +1,11 @@
 package br.com.acompanhamentofila.dao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.hamcrest.core.AllOf;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -72,7 +74,7 @@ public class ChamadoDAOTeste {
 	}
 
 	@Test
-	// @Ignore
+	@Ignore
 	public void listaDeChamadosOperadores() {
 		ChamadoDAO chamadoDAO = new ChamadoDAO();
 		Operador operador = new Operador();
@@ -104,6 +106,27 @@ public class ChamadoDAOTeste {
 			System.out.println("Chamado não encontrado");
 		} else {
 			System.out.println("Número Chamado: " + ch.getNumeroChamado() + " Prioridade: " + ch.getCriticidade());
+		}
+	}
+	
+	@Test
+	@Ignore
+	public void listaDePrioridade(){
+		ChamadoDAO chamadoDAO = new ChamadoDAO();
+		List<String> lista = chamadoDAO.listaDeCriticidade();
+		
+		for(String cr : lista){
+			System.out.println("Criticidade: "+cr);
+		}
+	}
+	
+	@Test
+	public void listagemDeSistemas(){
+		ChamadoDAO chamadoDAO = new ChamadoDAO();
+		List<String> lista = chamadoDAO.listaDeSistemas();
+		
+		for(String st : lista){
+			System.out.println(st);
 		}
 	}
 

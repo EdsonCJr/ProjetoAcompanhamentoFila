@@ -11,10 +11,12 @@ import br.com.acompanhamentofila.domain.Operador;
 public class OperadorDAOTeste {
 	
 	@Test
-	@Ignore
+	//@Ignore
 	public void salvar(){
 		
+		
 		Operador operador1 = new Operador();
+		/*
 		Operador operador2 = new Operador();
 		Operador operador3 = new Operador();
 		Operador operador4 = new Operador();
@@ -28,11 +30,12 @@ public class OperadorDAOTeste {
 		Operador operador12 = new Operador();
 		Operador operador13 = new Operador();
 		Operador operador14 = new Operador();
-		
+		*/
 		OperadorDAO operadorDAO = new OperadorDAO();
 		
 		
-		operador1.setNome("dos Santos Pereira Miriam");
+		operador1.setNome("Leal dos Santos Lauriete");
+		/*
 		operador2.setNome("Santana Helder");
 		operador3.setNome("de Jesus Bon Fim Alex");
 		operador4.setNome("Soares Da Costa Igor");
@@ -46,9 +49,10 @@ public class OperadorDAOTeste {
 		operador12.setNome("Cavicchio Junior Edson");
 		operador13.setNome("Alexandre do Nascimento Ricardo");
 		operador14.setNome("Sem operador");
-		
+		*/
 		
 		operadorDAO.merge(operador1);
+		/*
 		operadorDAO.merge(operador2);
 		operadorDAO.merge(operador3);
 		operadorDAO.merge(operador4);
@@ -62,10 +66,12 @@ public class OperadorDAOTeste {
 		operadorDAO.merge(operador12);
 		operadorDAO.merge(operador13);
 		operadorDAO.merge(operador14);
+		*/
 		
 	}
 	
 	@Test
+	@Ignore
 	public void listar(){
 		OperadorDAO operadorDAO = new OperadorDAO();
 		List<Operador> listaDeOperadores = new ArrayList<>();

@@ -50,7 +50,7 @@ public class Chamado {
 	@Column(length = 2500)
 	private String descricaoProblema;
 
-	@Column(length = 1000)
+	@Column
 	private Date dataUltimaResp;
 
 	@Column(length = 1000)

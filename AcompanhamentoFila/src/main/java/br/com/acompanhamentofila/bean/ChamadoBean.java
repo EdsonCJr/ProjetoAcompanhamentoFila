@@ -43,6 +43,9 @@ public class ChamadoBean implements Serializable {
 	private Operador operador;
 	private List<Chamado> listaDeChamados;
 	private List<Operador> listaDeOperadores;
+	private List<Chamado> chamadosFiltrados;
+	private List<String> listaDeCriticidade;
+	private List<String> listaDeSistemas;
 
 	public void setChamado(Chamado chamado) {
 		this.chamado = chamado;
@@ -75,13 +78,37 @@ public class ChamadoBean implements Serializable {
 	public void setListaDeChamados(List<Chamado> listaDeChamados) {
 		this.listaDeChamados = listaDeChamados;
 	}
-	
+
 	public void setListaDeOperadores(List<Operador> listaDeOperadores) {
 		this.listaDeOperadores = listaDeOperadores;
 	}
-	
+
 	public List<Operador> getListaDeOperadores() {
 		return listaDeOperadores;
+	}
+
+	public void setChamadosFiltrados(List<Chamado> chamadosFiltrados) {
+		this.chamadosFiltrados = chamadosFiltrados;
+	}
+
+	public List<Chamado> getChamadosFiltrados() {
+		return chamadosFiltrados;
+	}
+
+	public void setListaDeCriticidade(List<String> listaDeCriticidade) {
+		this.listaDeCriticidade = listaDeCriticidade;
+	}
+
+	public List<String> getListaDeCriticidade() {
+		return listaDeCriticidade;
+	}
+	
+	public void setListaDeSistemas(List<String> listaDeSistemas) {
+		this.listaDeSistemas = listaDeSistemas;
+	}
+	
+	public List<String> getListaDeSistemas() {
+		return listaDeSistemas;
 	}
 
 	public void novo() {
@@ -217,21 +244,27 @@ public class ChamadoBean implements Serializable {
 
 				case "Aguardando intervenção":
 					chamado.setStatusChamado(StatusChamado.AGUARDANDO_INTERVENCAO);
+					break;
 
 				case "Aguardando Retorno do Usuário":
 					chamado.setStatusChamado(StatusChamado.AGUARDANDO_RETORNO_DO_USUARIO);
+					break;
 
 				case "Designado":
 					chamado.setStatusChamado(StatusChamado.DESIGNADO);
+					break;
 
 				case "Atribuido":
 					chamado.setStatusChamado(StatusChamado.ATRIBUIDO);
+					break;
 
 				case "Em processamento":
 					chamado.setStatusChamado(StatusChamado.EM_PROCESSAMENTO);
+					break;
 
 				case "Reatribuido":
 					chamado.setStatusChamado(StatusChamado.REATRIBUIDO);
+					break;
 
 				}
 
@@ -337,23 +370,26 @@ public class ChamadoBean implements Serializable {
 	}
 
 	/*
-	 * Método utilizado para visualizar os dados completos do chamado
-	 * pela coluna Visualizar, caso a opção do ícone seja preferida 
-	 * esse método deve ser ativado (descomentado)
-	 * 
-	 * public void visualizar(ActionEvent event) { try {
-	 * 
-	 * chamado = (Chamado)
-	 * event.getComponent().getAttributes().get("chamadoSelecionado");
-	 * 
-	 * } catch (RuntimeException exception) {
-	 * Messages.addGlobalError("Ocorreu um erro ao selecionar o chamado.");
-	 * exception.printStackTrace(); } }
+	 * Método utilizado para visualizar os dados completos do chamado pela
+	 * coluna Visualizar, caso a opção do ícone seja preferida esse método deve
+	 * ser ativado (descomentado)
 	 */
+	public void visualizar(ActionEvent event) {
+		try {
+
+			chamado = (Chamado) event.getComponent().getAttributes().get("chamadoSelecionado");
+
+		} catch (RuntimeException exception) {
+			Messages.addGlobalError("Ocorreu um erro ao selecionar o chamado.");
+			exception.printStackTrace();
+		}
+	}
 
 	@PostConstruct
 	public void listar() {
 		carregaOperadores();
+		carregaCriticidade();
+		carregarSistemas();
 		try {
 			ChamadoDAO chamadoDao = new ChamadoDAO();
 			listaDeChamados = chamadoDao.listarChamadosAbertos();
@@ -397,17 +433,41 @@ public class ChamadoBean implements Serializable {
 		}
 	}
 
-	public void onRowSelect(SelectEvent event) {
-		chamadoSelecionado = (Chamado) event.getObject();
-	}
-	
-	public void carregaOperadores(){
+	/*
+	 * Método utilizado para selecionar a linha com um clique
+	 * 
+	 * public void onRowSelect(SelectEvent event) { chamadoSelecionado =
+	 * (Chamado) event.getObject(); }
+	 */
+
+	public void carregaOperadores() {
 		OperadorDAO operadorDAO = new OperadorDAO();
 		try {
 			listaDeOperadores = operadorDAO.listar();
 
 		} catch (RuntimeException exception) {
 			Messages.addGlobalError("Ocorreou um erro ao carregar a lista de operadores");
+			exception.printStackTrace();
+		}
+	}
+
+	public void carregaCriticidade() {
+		ChamadoDAO chamadoDAO = new ChamadoDAO();
+		try {
+			listaDeCriticidade = chamadoDAO.listaDeCriticidade();
+		} catch (RuntimeException exception) {
+			Messages.addGlobalError("Ocorreou um erro ao gerar a lista de criticidade");
+			exception.printStackTrace();
+		}
+	}
+	
+	public void carregarSistemas(){
+		ChamadoDAO chamadoDAO = new ChamadoDAO();
+		
+		try{
+			listaDeSistemas = chamadoDAO.listaDeSistemas();
+		} catch(RuntimeException exception){
+			Messages.addGlobalError("Ocorreu um erro ao gerar a lista de sistemas");
 			exception.printStackTrace();
 		}
 	}

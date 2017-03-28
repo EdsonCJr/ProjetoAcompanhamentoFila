@@ -8,6 +8,8 @@ import javax.persistence.criteria.Expression;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import br.com.acompanhamentofila.domain.Chamado;
@@ -93,6 +95,46 @@ public class ChamadoDAO extends GenericDAO<Chamado> {
 			session.close();
 		}
 
+	}
+
+	public List<String> listaDeCriticidade() {
+		Session session = HibernateUtil.getFabricaDeSessoes().openSession();
+
+		try {
+			Criteria query = session.createCriteria(Chamado.class);
+			query.setProjection(
+					Projections.distinct(Projections.projectionList().add(Projections.property("criticidade"))))
+					.addOrder(Order.asc("criticidade"));
+
+			List<String> listaCrit = query.list();
+
+			return listaCrit;
+		} catch (RuntimeException exception) {
+			throw exception;
+		} finally {
+			session.close();
+		}
+	}
+
+	public List<String> listaDeSistemas() {
+		Session session = HibernateUtil.getFabricaDeSessoes().openSession();
+
+		try {
+
+			Criteria query = session.createCriteria(Chamado.class);
+			query.setProjection(
+					Projections.distinct(Projections.projectionList().add(Projections.property("setorAbertura"))))
+					.addOrder(Order.asc("setorAbertura"));
+
+			List<String> listaSist = query.list();
+
+			return listaSist;
+
+		} catch (RuntimeException exception) {
+			throw exception;
+		} finally {
+			session.close();
+		}
 	}
 
 	/*
