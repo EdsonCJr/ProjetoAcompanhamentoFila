@@ -1,17 +1,15 @@
 package br.com.acompanhamentofila.dao;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.hamcrest.core.AllOf;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.acompanhamentofila.domain.Chamado;
 import br.com.acompanhamentofila.domain.Operador;
-import br.com.acompanhamentofila.enumeration.StatusChamado;
+import br.com.acompanhamentofila.domain.StatusChamado;
 
 public class ChamadoDAOTeste {
 
@@ -23,16 +21,20 @@ public class ChamadoDAOTeste {
 
 		Operador operador = new Operador();
 		OperadorDAO operadorDAO = new OperadorDAO();
+		
+		StatusChamado statusChamado = new StatusChamado();
+		StatusChamadoDAO statusChamadoDAO = new StatusChamadoDAO();
 
 		operador = operadorDAO.buscarOperadorPorNome("Cavicchio Junior Edson");
+		statusChamado = statusChamadoDAO.buscarStatus("Atribuido");
 
 		Date dt = new Date("08/02/2017 11:00");
 		Date dt1 = new Date("08/02/2017 13:31");
 		Date dt2 = new Date("02/08/2017 11:31");
 
-		ch.setNumeroChamado(988716L);
+		ch.setNumeroChamado(999999L);
 		ch.setDataAbertura(dt);
-		ch.setStatusChamado(StatusChamado.ATRIBUIDO);
+		ch.setStatusChamado(statusChamado);
 		ch.setCodigoCliente("MBZ_COORD01");
 		ch.setNomeCliente("COORDENADOR LOJA BAIRRO MBZ");
 		ch.setSetorAbertura("Suporte ao Sistema GOLD");
@@ -56,19 +58,18 @@ public class ChamadoDAOTeste {
 		ChamadoDAO chamadoDao = new ChamadoDAO();
 		List<Chamado> listaDeChamados = chamadoDao.listar();
 		for (Chamado ch : listaDeChamados) {
-			System.out.println(ch.getNumeroChamado() + " - " + ch.getCriticidade() + " - " + ch.getStatusChamado());
+			System.out.println(ch.getNumeroChamado() + " - " + ch.getCriticidade() + " - " + ch.getStatusChamado().getStatus());
 		}
 		System.out.println("Qtd:" + listaDeChamados.size());
 	}
 
 	@Test
-	@Ignore
+	//@Ignore
 	public void listarChamadosAbertos() {
 		ChamadoDAO chamadoDAO = new ChamadoDAO();
 		List<Chamado> OpenList = chamadoDAO.listarChamadosAbertos();
 		for (Chamado ch : OpenList) {
-			System.out.println(ch.getNumeroChamado() + " - " + ch.getCriticidade() + " - " + ch.getCriticidade() + " - "
-					+ ch.getOperadores().getNome());
+			System.out.println(ch.getNumeroChamado() + " - " + ch.getCriticidade() + " - " + ch.getStatusChamado().getStatus());
 		}
 		System.out.println("Qtd: " + OpenList.size());
 	}
@@ -121,6 +122,7 @@ public class ChamadoDAOTeste {
 	}
 	
 	@Test
+	@Ignore
 	public void listagemDeSistemas(){
 		ChamadoDAO chamadoDAO = new ChamadoDAO();
 		List<String> lista = chamadoDAO.listaDeSistemas();
@@ -129,5 +131,4 @@ public class ChamadoDAOTeste {
 			System.out.println(st);
 		}
 	}
-
 }

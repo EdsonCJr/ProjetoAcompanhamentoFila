@@ -20,18 +20,19 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
+
 
 import org.omnifaces.util.Messages;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.event.SelectEvent;
 import org.primefaces.model.UploadedFile;
 
 import br.com.acompanhamentofila.dao.ChamadoDAO;
 import br.com.acompanhamentofila.dao.OperadorDAO;
+import br.com.acompanhamentofila.dao.StatusChamadoDAO;
 import br.com.acompanhamentofila.domain.Chamado;
 import br.com.acompanhamentofila.domain.Operador;
-import br.com.acompanhamentofila.enumeration.StatusChamado;
+import br.com.acompanhamentofila.domain.StatusChamado;
+
 
 @SuppressWarnings("serial")
 @ManagedBean(name = "chamadoMB")
@@ -41,11 +42,13 @@ public class ChamadoBean implements Serializable {
 	private Chamado chamado;
 	private Chamado chamadoSelecionado;
 	private Operador operador;
+	private StatusChamado statusChamado;
 	private List<Chamado> listaDeChamados;
 	private List<Operador> listaDeOperadores;
 	private List<Chamado> chamadosFiltrados;
 	private List<String> listaDeCriticidade;
 	private List<String> listaDeSistemas;
+	
 
 	public void setChamado(Chamado chamado) {
 		this.chamado = chamado;
@@ -69,6 +72,14 @@ public class ChamadoBean implements Serializable {
 
 	public Operador getOperador() {
 		return operador;
+	}
+	
+	public void setStatusChamado(StatusChamado statusChamado) {
+		this.statusChamado = statusChamado;
+	}
+	
+	public StatusChamado getStatusChamado() {
+		return statusChamado;
 	}
 
 	public List<Chamado> getListaDeChamados() {
@@ -110,10 +121,12 @@ public class ChamadoBean implements Serializable {
 	public List<String> getListaDeSistemas() {
 		return listaDeSistemas;
 	}
+	
 
 	public void novo() {
 		chamado = new Chamado();
 		operador = new Operador();
+		statusChamado = new StatusChamado();
 	}
 
 	public void carregar() {
@@ -153,6 +166,7 @@ public class ChamadoBean implements Serializable {
 		 */
 		ChamadoDAO chamadoDAO = new ChamadoDAO();
 		OperadorDAO operadorDAO = new OperadorDAO();
+		StatusChamadoDAO statusChamadoDAO = new StatusChamadoDAO();
 
 		/*
 		 * Criando um obj File apontando para o arquivo .csv utilizano o caminho
@@ -239,35 +253,10 @@ public class ChamadoBean implements Serializable {
 				}
 
 				String statChamado = values[2].replaceAll("\"", "");
+				statusChamado = statusChamadoDAO.buscarStatus(statChamado);
+				chamado.setStatusChamado(statusChamado);
 
-				switch (statChamado) {
-
-				case "Aguardando intervenção":
-					chamado.setStatusChamado(StatusChamado.AGUARDANDO_INTERVENCAO);
-					break;
-
-				case "Aguardando Retorno do Usuário":
-					chamado.setStatusChamado(StatusChamado.AGUARDANDO_RETORNO_DO_USUARIO);
-					break;
-
-				case "Designado":
-					chamado.setStatusChamado(StatusChamado.DESIGNADO);
-					break;
-
-				case "Atribuido":
-					chamado.setStatusChamado(StatusChamado.ATRIBUIDO);
-					break;
-
-				case "Em processamento":
-					chamado.setStatusChamado(StatusChamado.EM_PROCESSAMENTO);
-					break;
-
-				case "Reatribuido":
-					chamado.setStatusChamado(StatusChamado.REATRIBUIDO);
-					break;
-
-				}
-
+				
 				String codigoCliente = values[3].replaceAll("\"", "");
 
 				String nomeCliente = values[4].replaceAll("\"", "");

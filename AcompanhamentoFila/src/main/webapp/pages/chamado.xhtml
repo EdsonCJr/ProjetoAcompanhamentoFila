@@ -51,8 +51,14 @@
 					<h:outputText value="#{chamado.dataAbertura}" />
 				</p:column>
 
-				<p:column headerText="Status chamado">
-					<h:outputText value="#{chamado.statusChamado.toString()}" />
+				<p:column headerText="Status chamado"
+					filterBy="#{chamado.statusChamado}" filterMatchMode="in">
+					<f:facet name="filter">
+						<p:selectCheckboxMenu label="Status chamado"
+							onchange="PF('dtChamado').filter()">
+						</p:selectCheckboxMenu>
+					</f:facet>
+					<h:outputText value="#{chamado.statusChamado.status}" />
 				</p:column>
 
 				<p:column headerText="Setor Abertura"
@@ -174,7 +180,7 @@
 						<h:outputText value="#{chamadoMB.chamado.numeroChamado}" />
 					</p:column>
 					<p:column>
-						<h:outputText value="#{chamadoMB.chamado.statusChamado}" />
+						<h:outputText value="#{chamadoMB.chamado.statusChamado.status}" />
 					</p:column>
 					<p:column>
 						<h:outputText value="#{chamadoMB.chamado.criticidade}" />

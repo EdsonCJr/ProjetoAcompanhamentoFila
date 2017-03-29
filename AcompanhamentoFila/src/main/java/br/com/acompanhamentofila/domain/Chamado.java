@@ -5,8 +5,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -15,7 +13,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import br.com.acompanhamentofila.enumeration.StatusChamado;
 
 @Entity
 @Table(name = "tbl_chamado")
@@ -28,8 +25,8 @@ public class Chamado {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataAbertura;
 
-	@Column
-	@Enumerated(EnumType.STRING)
+	@OneToOne
+	@JoinColumn(name = "statusChamado_codigo")
 	private StatusChamado statusChamado;
 
 	@Column(length = 15)

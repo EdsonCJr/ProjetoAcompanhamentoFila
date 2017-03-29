@@ -14,7 +14,7 @@ import org.hibernate.criterion.Restrictions;
 
 import br.com.acompanhamentofila.domain.Chamado;
 import br.com.acompanhamentofila.domain.Operador;
-import br.com.acompanhamentofila.enumeration.StatusChamado;
+import br.com.acompanhamentofila.domain.StatusChamado;
 import br.com.acompanhamentofila.util.HibernateUtil;
 
 public class ChamadoDAO extends GenericDAO<Chamado> {
@@ -22,11 +22,15 @@ public class ChamadoDAO extends GenericDAO<Chamado> {
 	public void fecharChamado(List<Chamado> listaDeChamados) {
 		Session session = HibernateUtil.getFabricaDeSessoes().openSession();
 		Transaction transaction = null;
+
+		StatusChamadoDAO statusChamadoDAO = new StatusChamadoDAO();
+		StatusChamado statusChamado = new StatusChamado();
 		try {
+			statusChamado = statusChamadoDAO.buscarStatus("Resolvido");
 			transaction = session.beginTransaction();
 			for (Chamado ch : listaDeChamados) {
 
-				ch.setStatusChamado(StatusChamado.RESOLVIDO);
+				ch.setStatusChamado(statusChamado);
 				session.merge(ch);
 
 			}
@@ -45,15 +49,19 @@ public class ChamadoDAO extends GenericDAO<Chamado> {
 		Session session = HibernateUtil.getFabricaDeSessoes().openSession();
 		try {
 			Criteria query = session.createCriteria(Chamado.class);
+			query.createAlias("statusChamado", "sc");
+			query.add(Restrictions.ne("sc.status", "Resolvido"));
+
 			/*
 			 * query.add(Restrictions.ne("statusChamado", "Resolvido"))
 			 * adicionando a restrição .ne (not equals) a query para recuperar
 			 * somente os chamados com o status Aguardando
 			 * intervenção", "Aguardando Retorno do Usuário", "Atribuido",
 			 * "Designado", "Em processamento" e "Reatribuido"
-			 */
-			query.add(Restrictions.ne("statusChamado", StatusChamado.RESOLVIDO));
-			/*
+			 * 
+			 * query.add(Restrictions.ne("statusChamado",
+			 * StatusChamado.RESOLVIDO));
+			 * 
 			 * query.add(Restrictions.in("statusChamado",
 			 * "Aguardando intervenção", "Aguardando Retorno do Usuário",
 			 * "Atribuido", "Designado", "Em processamento", "Reatribuido"));
@@ -62,6 +70,7 @@ public class ChamadoDAO extends GenericDAO<Chamado> {
 			 * intervenção", "Aguardando Retorno do Usuário", "Atribuido",
 			 * "Designado", "Em processamento" e "Reatribuido"
 			 */
+
 			List<Chamado> result = query.list();
 			return result;
 		} catch (RuntimeException exception) {
