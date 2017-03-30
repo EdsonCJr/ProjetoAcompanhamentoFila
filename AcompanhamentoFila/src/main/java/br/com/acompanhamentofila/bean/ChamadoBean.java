@@ -48,6 +48,7 @@ public class ChamadoBean implements Serializable {
 	private List<Chamado> chamadosFiltrados;
 	private List<String> listaDeCriticidade;
 	private List<String> listaDeSistemas;
+	private List<StatusChamado> listaDeStatusChamado;
 	
 
 	public void setChamado(Chamado chamado) {
@@ -122,6 +123,14 @@ public class ChamadoBean implements Serializable {
 		return listaDeSistemas;
 	}
 	
+	public void setListaDeStatusChamado(List<StatusChamado> listaDeStatusChamado) {
+		this.listaDeStatusChamado = listaDeStatusChamado;
+	}
+	
+	public List<StatusChamado> getListaDeStatusChamado() {
+		return listaDeStatusChamado;
+	}
+	
 
 	public void novo() {
 		chamado = new Chamado();
@@ -179,8 +188,8 @@ public class ChamadoBean implements Serializable {
 		 * Obj SimpleDateFormat criado para formatar as datas recebidas no
 		 * arquivo .csv para salvar no banco de dados corretamente
 		 */
-		SimpleDateFormat fmtEnUs = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
-		SimpleDateFormat fmtPtBr = new SimpleDateFormat("dd/mm/yyyy HH:mm:ss");
+		SimpleDateFormat fmtEnUs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat fmtPtBr = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
 		try {
 
@@ -247,7 +256,7 @@ public class ChamadoBean implements Serializable {
 					Date dtAbertura = null;
 					chamado.setDataAbertura(dtAbertura);
 
-				} else {
+				} else {					
 					Date dtAbertura = fmtEnUs.parse(values[1]);
 					chamado.setDataAbertura(dtAbertura);
 				}
@@ -379,6 +388,7 @@ public class ChamadoBean implements Serializable {
 		carregaOperadores();
 		carregaCriticidade();
 		carregarSistemas();
+		carregaStatusChamado();
 		try {
 			ChamadoDAO chamadoDao = new ChamadoDAO();
 			listaDeChamados = chamadoDao.listarChamadosAbertos();
@@ -459,6 +469,21 @@ public class ChamadoBean implements Serializable {
 			Messages.addGlobalError("Ocorreu um erro ao gerar a lista de sistemas");
 			exception.printStackTrace();
 		}
+	}
+	
+	public void carregaStatusChamado(){
+		
+		StatusChamadoDAO statusChamadoDAO = new StatusChamadoDAO();
+		
+		try{
+			
+			listaDeStatusChamado = statusChamadoDAO.listarStatusOrdenado();
+			
+		} catch(RuntimeException exception){
+			Messages.addGlobalError("Ocorreou um erro ao gerar a lista de status de chamado");
+			exception.printStackTrace();
+		}
+		
 	}
 
 }

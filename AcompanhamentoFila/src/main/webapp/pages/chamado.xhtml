@@ -52,10 +52,12 @@
 				</p:column>
 
 				<p:column headerText="Status chamado"
-					filterBy="#{chamado.statusChamado}" filterMatchMode="in">
+					filterBy="#{chamado.statusChamado.status}" filterMatchMode="in">
 					<f:facet name="filter">
 						<p:selectCheckboxMenu label="Status chamado"
 							onchange="PF('dtChamado').filter()">
+							<f:selectItems value="#{chamadoMB.listaDeStatusChamado}" var="st"
+								itemLabel="#{st.status}" itemValue="#{st.status}" />
 						</p:selectCheckboxMenu>
 					</f:facet>
 					<h:outputText value="#{chamado.statusChamado.status}" />

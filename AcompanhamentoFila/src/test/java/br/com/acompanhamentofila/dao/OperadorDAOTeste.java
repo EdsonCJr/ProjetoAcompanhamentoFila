@@ -34,7 +34,7 @@ public class OperadorDAOTeste {
 		OperadorDAO operadorDAO = new OperadorDAO();
 		
 		
-		operador1.setNome("Leal dos Santos Lauriete");
+		operador1.setNome("Pereira Abreu Leandro");
 		/*
 		operador2.setNome("Santana Helder");
 		operador3.setNome("de Jesus Bon Fim Alex");

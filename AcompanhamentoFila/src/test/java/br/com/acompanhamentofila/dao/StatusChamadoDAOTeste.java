@@ -1,5 +1,9 @@
 package br.com.acompanhamentofila.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Ignore;
 import org.junit.Test;
 
 import br.com.acompanhamentofila.domain.StatusChamado;
@@ -7,6 +11,7 @@ import br.com.acompanhamentofila.domain.StatusChamado;
 public class StatusChamadoDAOTeste {
 	
 	@Test
+	@Ignore
 	public void salvar(){
 		StatusChamadoDAO statusChamadoDAO = new StatusChamadoDAO();
 		StatusChamado statusChamado1 = new StatusChamado();
@@ -33,6 +38,18 @@ public class StatusChamadoDAOTeste {
 		statusChamadoDAO.merge(statusChamado6);
 		statusChamadoDAO.merge(statusChamado7);
 
+	}
+	
+	@Test
+	public void listaOrdenada(){
+		StatusChamadoDAO statusChamadoDAO = new StatusChamadoDAO();
+		List<StatusChamado> lista = new ArrayList<>();
+		
+		lista = statusChamadoDAO.listarStatusOrdenado();
+		
+		for(StatusChamado st : lista){
+			System.out.println("Status: "+st.getStatus());
+		}
 	}
 
 }
