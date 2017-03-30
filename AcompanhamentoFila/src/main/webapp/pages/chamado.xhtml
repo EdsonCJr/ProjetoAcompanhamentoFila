@@ -48,11 +48,13 @@
 				</p:column>
 
 				<p:column headerText="Data abertura">
-					<h:outputText value="#{chamado.dataAbertura}" />
+					<h:outputText value="#{chamado.dataAbertura}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+					</h:outputText>
 				</p:column>
 
-				<p:column headerText="Status chamado"
-					filterBy="#{chamado.statusChamado.status}" filterMatchMode="in">
+				<p:column filterBy="#{chamado.statusChamado.status}"
+					filterMatchMode="in">
 					<f:facet name="filter">
 						<p:selectCheckboxMenu label="Status chamado"
 							onchange="PF('dtChamado').filter()">
@@ -63,10 +65,9 @@
 					<h:outputText value="#{chamado.statusChamado.status}" />
 				</p:column>
 
-				<p:column headerText="Setor Abertura"
-					filterBy="#{chamado.setorAbertura}" filterMatchMode="in">
+				<p:column filterBy="#{chamado.setorAbertura}" filterMatchMode="in">
 					<f:facet name="filter">
-						<p:selectCheckboxMenu label="Sistemas"
+						<p:selectCheckboxMenu label="Setor de Abertura"
 							onchange="PF('dtChamado').filter()">
 							<f:selectItems value="#{chamadoMB.listaDeSistemas}" />
 						</p:selectCheckboxMenu>
@@ -74,8 +75,7 @@
 					<h:outputText value="#{chamado.setorAbertura}" />
 				</p:column>
 
-				<p:column headerText="Criticidade" filterBy="#{chamado.criticidade}"
-					filterMatchMode="in">
+				<p:column filterBy="#{chamado.criticidade}" filterMatchMode="in">
 					<f:facet name="filter">
 						<p:selectCheckboxMenu label="Criticidade"
 							onchange="PF('dtChamado').filter()">
@@ -101,7 +101,9 @@
 
 				<p:column headerText="Vencimento SLA"
 					sortBy="#{chamado.vencimentoSla}">
-					<h:outputText value="#{chamado.vencimentoSla}" />
+					<h:outputText value="#{chamado.vencimentoSla}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+					</h:outputText>
 				</p:column>
 
 
@@ -137,12 +139,20 @@
 
 			<h:panelGrid columns="3">
 				<p:commandButton value="Salvar" actionListener="#{chamadoMB.salvar}"
-					update=":mensagem :fmrcallList:tblChamado" />
-				<p:commandButton value="Fechar"
-					oncomplete="PF('uplArquivo').hide();" />
+					update=":mensagem :fmrcallList:tblChamado"
+					oncomplete="PF('uplArquivo').hide()" />
+				<p:commandButton value="Fechar" oncomplete="PF('uplArquivo').hide()" />
 			</h:panelGrid>
 		</h:form>
+	</p:dialog>
 
+	<p:ajaxStatus onstart="PF('statusUpl').show()"
+		onsuccess="PF('statusUpl').hide()" />
+
+	<p:dialog widgetVar="statusUpl" modal="true" draggable="false"
+		closable="false" resizable="false" showHeader="false"
+		showEffect="fade">
+		<p:graphicImage library="image" name="loadingBar1.gif" />
 	</p:dialog>
 
 	<!-- Caso a opção de utilizar a coluna com o ícone para visualização do chamado seja preferida

@@ -47,7 +47,7 @@
 
 				<h:panelGrid columns="3">
 					<p:commandButton value="Salvar"
-						actionListener="#{chamadoMB.salvar}" update=":mensagem" />
+						actionListener="#{chamadoMB.salvar}" update=":mensagem" oncomplete="PF('uplArquivo').hide()" />
 					<p:commandButton value="Fechar"
 						oncomplete="PF('uplArquivo').hide();" />
 				</h:panelGrid>
