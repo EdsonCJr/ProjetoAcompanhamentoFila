@@ -106,6 +106,10 @@
 					</h:outputText>
 				</p:column>
 
+				<p:column headerText="Idade Chamado" sortBy="#{chamado.idadeChamado}">
+					<h:outputText value="#{chamado.idadeChamado}" />
+				</p:column>
+
 
 				<!--
 				Coluna com a opção de um ícone para visualizar os dados do chamado, caso esse opção seja preferida
@@ -134,7 +138,7 @@
 				<p:outputLabel for="upFile" value="Escolha o arquivo" />
 				<p:fileUpload id="upFile" mode="advanced"
 					fileUploadListener="#{chamadoMB.uploadFile}" update="mensagem"
-					auto="true" />
+					auto="true" allowTypes="/(\.|\/)(csv)$/" />
 			</h:panelGrid>
 
 			<h:panelGrid columns="3">

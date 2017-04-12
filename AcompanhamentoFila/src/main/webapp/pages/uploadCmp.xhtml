@@ -10,18 +10,22 @@
 
 	<ui:define name="conteudo">
 
-		<h:form>
+		<p:fieldset legend="Upload de arquivo">
+		
+			<h:form id="fmrUpl" enctype="multipart/form-data">
+				<h:panelGrid>					
+					<p:fileUpload id="upFile" mode="advanced"
+						fileUploadListener="#{uploadMB.uploadFile}" update="mensagem"
+						auto="true" allowTypes="/(\.|\/)(csv)$/" label="Escolha o arquivo" />
+				</h:panelGrid>
 
-			<p:panel header="Upload de arquivo">
-				<p:panelGrid columns="2">
-					<p:graphicImage library="image" name="Upload1.png" width="64px" height="64px"/>
-					<p:commandButton value="Upload"
-						oncomplete="PF('uplArquivo').show();"
-						actionListener="#{chamadoMB.novo}" icon="ui-icon-extlink" />
-				</p:panelGrid>
+				<h:panelGrid columns="3">
+					<p:commandButton value="Salvar" actionListener="#{uploadMB.salvar}"
+						update=":mensagem" oncomplete="PF('uplArquivo').hide()" />
+				</h:panelGrid>
+			</h:form>
 
-			</p:panel>
-		</h:form>
+		</p:fieldset>
 
 		<p:ajaxStatus onstart="PF('statusUpl').show()"
 			onsuccess="PF('statusUpl').hide()" />
@@ -32,29 +36,6 @@
 				<p:graphicImage library="image" name="loadingBar1.gif" />
 			</h:form>
 		</p:dialog>
-
-		<p:dialog header="Upload do arquivo de chamados"
-			widgetVar="uplArquivo" draggable="false" resizable="false"
-			modal="true" showEffect="fade" hideEffect="fade">
-
-			<h:form id="fmrUpl" enctype="multipart/form-data">
-				<h:panelGrid>
-					<p:outputLabel for="upFile" value="Escolha o arquivo" />
-					<p:fileUpload id="upFile" mode="advanced"
-						fileUploadListener="#{chamadoMB.uploadFile}" update="mensagem"
-						auto="true" />
-				</h:panelGrid>
-
-				<h:panelGrid columns="3">
-					<p:commandButton value="Salvar"
-						actionListener="#{chamadoMB.salvar}" update=":mensagem" oncomplete="PF('uplArquivo').hide()" />
-					<p:commandButton value="Fechar"
-						oncomplete="PF('uplArquivo').hide();" />
-				</h:panelGrid>
-			</h:form>
-
-		</p:dialog>
-
 
 	</ui:define>
 </ui:composition>

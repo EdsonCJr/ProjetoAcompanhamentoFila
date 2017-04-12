@@ -69,6 +69,9 @@ public class Chamado {
 
 	@Transient
 	private String caminho;
+	
+	@Transient
+	private int idadeChamado;
 
 	public long getNumeroChamado() {
 		return numeroChamado;
@@ -196,6 +199,14 @@ public class Chamado {
 
 	public void setCaminho(String caminho) {
 		this.caminho = caminho;
+	}
+	
+	public int getIdadeChamado() {
+		return idadeChamado;
+	}
+	
+	public void setIdadeChamado(int idadeChamado) {
+		this.idadeChamado = idadeChamado;
 	}
 
 	@Override

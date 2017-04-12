@@ -13,7 +13,7 @@
 		<param-value>Development</param-value>
 	</context-param>
 
-	<!-- Tema do Primefaces -->
+	<!-- Tema do Primefaces bootstrap, aristo, bluesky-->
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
 		<param-value>bluesky</param-value>

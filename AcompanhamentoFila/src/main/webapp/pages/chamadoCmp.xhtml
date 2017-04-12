@@ -10,52 +10,109 @@
 
 	<ui:define name="conteudo">
 		<h:form id="fmrcallList">
+
 			<p:panel header="Lista de chamados">
+
 				<p:dataTable id="tblChamado" paginator="true"
 					value="#{chamadoMB.listaDeChamados}" var="chamado" rows="10"
-					paginatorPosition="bottom">
+					paginatorPosition="bottom" widgetVar="dtChamado"
+					filteredValue="#{chamadoMB.chamadosFiltrados}">
+
 					<f:facet name="header">
 						<p:commandButton value="Upload"
 							oncomplete="PF('uplArquivo').show();"
 							actionListener="#{chamadoMB.novo}" />
 					</f:facet>
 
+					<!--
+					Evento para selecionar a linha com um clique, caso essa opção seja escolhida
+					é necessário descomentar o p:ajax assim como 
+					o método onRowSelect no managed bean chamadoMB, também é necessário incluir 
+					os atibutos selectionMode="single" selection="#{chamadoMB.chamadoSelecionado}"
+				    rowKey="#{chamado.numeroChamado}" no dataTable. É importante notar que o dialogo
+				    Detalhes do chamado widgetVar="dlgChamado" deve ter o objeto alterado para 
+				    chamadoSelecionado (exemplo: chamadoMB.chamadoSelecionado.numeroChamado). 
+					
+				<p:ajax event="rowSelect" listener="#{chamadoMB.onRowSelect}"
+					update=":fmrChamado:painelChamado"
+					oncomplete="PF('dlgChamado').show();" />
+				-->
+
 					<p:column headerText="Número chamado"
-						filterBy="#{chamado.numeroChamado}"
-						sortBy="#{chamado.numeroChamado}">
+						sortBy="#{chamado.numeroChamado}"
+						filterBy="#{chamado.numeroChamado}">
 						<h:outputText value="#{chamado.numeroChamado}" />
 					</p:column>
 
 					<p:column headerText="Data abertura">
-						<h:outputText value="#{chamado.dataAbertura}" />
+						<h:outputText value="#{chamado.dataAbertura}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+						</h:outputText>
 					</p:column>
 
-					<p:column headerText="Status chamado"
-						filterBy="#{chamado.statusChamado}">
+					<p:column filterBy="#{chamado.statusChamado.status}"
+						filterMatchMode="in">
 						<f:facet name="filter">
-							<p:selectOneMenu>
-							</p:selectOneMenu>
+							<p:selectCheckboxMenu label="Status chamado"
+								onchange="PF('dtChamado').filter()">
+								<f:selectItems value="#{chamadoMB.listaDeStatusChamado}"
+									var="st" itemLabel="#{st.status}" itemValue="#{st.status}" />
+							</p:selectCheckboxMenu>
 						</f:facet>
-						<h:outputText value="#{chamado.statusChamado}" />
+						<h:outputText value="#{chamado.statusChamado.status}" />
 					</p:column>
 
-					<p:column headerText="Setor Abertura">
+					<p:column filterBy="#{chamado.setorAbertura}" filterMatchMode="in">
+						<f:facet name="filter">
+							<p:selectCheckboxMenu label="Setor de Abertura"
+								onchange="PF('dtChamado').filter()">
+								<f:selectItems value="#{chamadoMB.listaDeSistemas}" />
+							</p:selectCheckboxMenu>
+						</f:facet>
 						<h:outputText value="#{chamado.setorAbertura}" />
 					</p:column>
 
-					<p:column headerText="Criticidade"
-						filterBy="#{chamado.criticidade}">
+					<p:column filterBy="#{chamado.criticidade}" filterMatchMode="in">
+						<f:facet name="filter">
+							<p:selectCheckboxMenu label="Criticidade"
+								onchange="PF('dtChamado').filter()">
+								<f:selectItems value="#{chamadoMB.listaDeCriticidade}" />
+							</p:selectCheckboxMenu>
+						</f:facet>
 						<h:outputText value="#{chamado.criticidade}" />
 					</p:column>
 
-					<p:column headerText="Operadores" filterBy="#{chamado.operadores}">
-						<h:outputText value="#{chamado.operadores}" />
+					<p:column headerText="Operadores"
+						filterBy="#{chamado.operadores.nome}" filterMatchMode="exact">
+						<f:facet name="filter">
+							<p:selectOneMenu onchange="PF('dtChamado').filter()">
+								<f:selectItem itemLabel="Selecione um operador"
+									itemValue="#{null}" noSelectionOption="true" />
+								<f:selectItems value="#{chamadoMB.listaDeOperadores}"
+									var="operador" itemLabel="#{operador.nome}"
+									itemValue="#{operador.nome}" />
+							</p:selectOneMenu>
+						</f:facet>
+						<h:outputText value="#{chamado.operadores.nome}" />
 					</p:column>
 
-					<p:column headerText="Vencimento SLA">
-						<h:outputText value="#{chamado.vencimentoSla}" />
+					<p:column headerText="Vencimento SLA"
+						sortBy="#{chamado.vencimentoSla}">
+						<h:outputText value="#{chamado.vencimentoSla}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+						</h:outputText>
 					</p:column>
 
+					<p:column headerText="Idade Chamado"
+						sortBy="#{chamado.idadeChamado}">
+						<h:outputText value="#{chamado.idadeChamado}" />
+					</p:column>
+
+
+					<!--Coluna com a opção de um ícone para visualizar os dados do chamado, caso esse opção seja preferida
+				        o dialogo Detalhes do chamado widgetVar="dlgChamado" deve ter o objeto alterado para chamado 
+				        (exemplo: chamadoMB.chamado.numeroChamado). 
+				    -->
 					<p:column>
 						<p:commandButton icon="ui-icon-search"
 							actionListener="#{chamadoMB.visualizar}"
@@ -66,19 +123,10 @@
 					</p:column>
 
 				</p:dataTable>
+
 			</p:panel>
 
 		</h:form>
-
-		<p:ajaxStatus onstart="PF('statusUpl').show()"
-			onsuccess="PF('statusUpl').hide()" />
-		<p:dialog widgetVar="statusUpl" modal="true" draggable="false"
-			closable="false" resizable="false" showHeader="false"
-			showEffect="fade">
-			<h:form>
-				<p:graphicImage library="image" name="loadingBar1.gif" />
-			</h:form>
-		</p:dialog>
 
 		<p:dialog header="Upload do arquivo de chamados"
 			widgetVar="uplArquivo" draggable="false" resizable="false"
@@ -86,23 +134,34 @@
 
 			<h:form id="fmrUpl" enctype="multipart/form-data">
 				<h:panelGrid>
-					<p:outputLabel for="upFile" value="Escolha o arquivo" />
 					<p:fileUpload id="upFile" mode="advanced"
 						fileUploadListener="#{chamadoMB.uploadFile}" update="mensagem"
-						auto="true" />
+						auto="true" allowTypes="/(\.|\/)(csv)$/" label="Escolha o arquivo" />
 				</h:panelGrid>
 
 				<h:panelGrid columns="3">
 					<p:commandButton value="Salvar"
 						actionListener="#{chamadoMB.salvar}"
-						update=":mensagem :fmrcallList:tblChamado" />
+						update=":mensagem :fmrcallList:tblChamado"
+						oncomplete="PF('uplArquivo').hide()" />
 					<p:commandButton value="Fechar"
-						oncomplete="PF('uplArquivo').hide();" />
+						oncomplete="PF('uplArquivo').hide()" />
 				</h:panelGrid>
 			</h:form>
-
 		</p:dialog>
 
+		<p:ajaxStatus onstart="PF('statusUpl').show()"
+			onsuccess="PF('statusUpl').hide()" />
+
+		<p:dialog widgetVar="statusUpl" modal="true" draggable="false"
+			closable="false" resizable="false" showHeader="false"
+			showEffect="fade">
+			<p:graphicImage library="image" name="loadingBar1.gif" />
+		</p:dialog>
+
+		<!-- Caso a opção de utilizar a coluna com o ícone para visualização do chamado seja preferida
+		o obj 'chamadoSelecionado' deve ser substituido por 'chamado'
+	 -->
 		<p:dialog header="Detalhes do chamado" widgetVar="dlgChamado"
 			draggable="false" resizable="false" modal="true" showEffect="fade"
 			hideEffect="fade" width="500px" height="500px">
@@ -137,7 +196,7 @@
 							<h:outputText value="#{chamadoMB.chamado.numeroChamado}" />
 						</p:column>
 						<p:column>
-							<h:outputText value="#{chamadoMB.chamado.statusChamado}" />
+							<h:outputText value="#{chamadoMB.chamado.statusChamado.status}" />
 						</p:column>
 						<p:column>
 							<h:outputText value="#{chamadoMB.chamado.criticidade}" />
@@ -238,7 +297,7 @@
 
 					<p:row>
 						<p:column colspan="4">
-							<h:outputText value="#{chamadoMB.chamado.operadores}" />
+							<h:outputText value="#{chamadoMB.chamado.operadores.nome}" />
 						</p:column>
 					</p:row>
 

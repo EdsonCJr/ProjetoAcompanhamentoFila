@@ -1,9 +1,18 @@
 package br.com.acompanhamentofila.dao;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.print.attribute.standard.DateTimeAtCompleted;
+import javax.swing.text.DateFormatter;
+
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -64,7 +73,7 @@ public class ChamadoDAOTeste {
 	}
 
 	@Test
-	//@Ignore
+	@Ignore
 	public void listarChamadosAbertos() {
 		ChamadoDAO chamadoDAO = new ChamadoDAO();
 		List<Chamado> OpenList = chamadoDAO.listarChamadosAbertos();
@@ -130,5 +139,56 @@ public class ChamadoDAOTeste {
 		for(String st : lista){
 			System.out.println(st);
 		}
+	}
+	
+	@Test
+	@Ignore
+	public void calculaIdadeChamado(){
+		Date dtAtual = new Date();		
+		Date dtChamado = new Date("27/05/2016");
+		
+		DateTime dt = new DateTime();
+		
+		System.out.println("Obj DateTime: "+dt);
+		
+		DateTime dt1 = new DateTime(dtAtual);
+		DateTime dt2 = new DateTime(dtChamado);
+		
+		int dias = Days.daysBetween(dt1, dt2).getDays();
+		
+		System.out.println("Idade do chamado: "+dias+" dias");
+		
+	}
+	
+	@Test
+	public void idadeChamadoPorSistema(){
+		ChamadoDAO chamadoDAO = new ChamadoDAO();
+		
+		List<String> listaDeSistemas = new ArrayList<>();
+		
+		listaDeSistemas = chamadoDAO.listaDeSistemas();
+		
+		List<Chamado> listaDechamados = new ArrayList<>();
+		
+		listaDechamados = chamadoDAO.listarChamadosAbertos();
+		
+		
+		int qtd = 0;
+		for(String s : listaDeSistemas){
+			
+			for (Chamado c : listaDechamados){
+				
+				if(c.getSetorAbertura().equals(s)){
+					qtd+=1;
+					System.out.println("Obj c "+c.getSetorAbertura()+" - Obj s: "+s+" qtd: "+qtd);
+				} 
+			 	
+			}
+			qtd = 0;
+			listaDechamados = chamadoDAO.listarChamadosAbertos();
+		}
+		System.out.println("qtd: "+qtd);
+		
+		
 	}
 }

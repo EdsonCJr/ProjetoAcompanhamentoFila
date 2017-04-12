@@ -1,5 +1,7 @@
 package br.com.acompanhamentofila.dao;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.JoinColumn;
@@ -11,6 +13,8 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 import br.com.acompanhamentofila.domain.Chamado;
 import br.com.acompanhamentofila.domain.Operador;
@@ -71,8 +75,41 @@ public class ChamadoDAO extends GenericDAO<Chamado> {
 			 * "Designado", "Em processamento" e "Reatribuido"
 			 */
 
-			List<Chamado> result = query.list();
+			List<Chamado> listaCh = query.list();
+
+			List<Chamado> result = new ArrayList<>();
+
+			DateTime hoje = new DateTime();
+
+			for (Chamado c : listaCh) {
+
+				Chamado ch = new Chamado();
+
+				ch.setNumeroChamado(c.getNumeroChamado());
+				ch.setDataAbertura(c.getDataAbertura());
+				ch.setStatusChamado(c.getStatusChamado());
+				ch.setCodigoCliente(c.getCodigoCliente());
+				ch.setNomeCliente(c.getNomeCliente());
+				ch.setSetorAbertura(c.getSetorAbertura());
+				ch.setProblemaAbertura(c.getProblemaAbertura());
+				ch.setCriticidade(c.getCriticidade());
+				ch.setDescricaoProblema(c.getDescricaoProblema());
+				ch.setDataUltimaResp(c.getDataUltimaResp());
+				ch.setUltimaIntervecao(c.getUltimaIntervecao());
+				ch.setUltimaSolicitacao(c.getUltimaSolicitacao());
+				ch.setOperadores(c.getOperadores());
+				ch.setVencimentoSla(c.getVencimentoSla());
+
+				DateTime dtCh = new DateTime(c.getDataAbertura());
+				int idade = Days.daysBetween(dtCh, hoje).getDays();
+				
+				ch.setIdadeChamado(idade);
+
+				result.add(ch);
+			}
+
 			return result;
+
 		} catch (RuntimeException exception) {
 			throw exception;
 		} finally {
