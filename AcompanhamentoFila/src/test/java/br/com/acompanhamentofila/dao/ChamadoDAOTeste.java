@@ -30,7 +30,7 @@ public class ChamadoDAOTeste {
 
 		Operador operador = new Operador();
 		OperadorDAO operadorDAO = new OperadorDAO();
-		
+
 		StatusChamado statusChamado = new StatusChamado();
 		StatusChamadoDAO statusChamadoDAO = new StatusChamadoDAO();
 
@@ -67,7 +67,8 @@ public class ChamadoDAOTeste {
 		ChamadoDAO chamadoDao = new ChamadoDAO();
 		List<Chamado> listaDeChamados = chamadoDao.listar();
 		for (Chamado ch : listaDeChamados) {
-			System.out.println(ch.getNumeroChamado() + " - " + ch.getCriticidade() + " - " + ch.getStatusChamado().getStatus());
+			System.out.println(
+					ch.getNumeroChamado() + " - " + ch.getCriticidade() + " - " + ch.getStatusChamado().getStatus());
 		}
 		System.out.println("Qtd:" + listaDeChamados.size());
 	}
@@ -78,7 +79,8 @@ public class ChamadoDAOTeste {
 		ChamadoDAO chamadoDAO = new ChamadoDAO();
 		List<Chamado> OpenList = chamadoDAO.listarChamadosAbertos();
 		for (Chamado ch : OpenList) {
-			System.out.println(ch.getNumeroChamado() + " - " + ch.getCriticidade() + " - " + ch.getStatusChamado().getStatus());
+			System.out.println(
+					ch.getNumeroChamado() + " - " + ch.getCriticidade() + " - " + ch.getStatusChamado().getStatus());
 		}
 		System.out.println("Qtd: " + OpenList.size());
 	}
@@ -100,7 +102,7 @@ public class ChamadoDAOTeste {
 				System.out
 						.println("Número Chamado: " + ch.getNumeroChamado() + " Status: " + ch.getStatusChamado() + "");
 			}
-			System.out.println("Qtd chamado: "+lista.size());
+			System.out.println("Qtd chamado: " + lista.size());
 		}
 	}
 
@@ -118,77 +120,115 @@ public class ChamadoDAOTeste {
 			System.out.println("Número Chamado: " + ch.getNumeroChamado() + " Prioridade: " + ch.getCriticidade());
 		}
 	}
-	
+
 	@Test
 	@Ignore
-	public void listaDePrioridade(){
+	public void listaDePrioridade() {
 		ChamadoDAO chamadoDAO = new ChamadoDAO();
 		List<String> lista = chamadoDAO.listaDeCriticidade();
-		
-		for(String cr : lista){
-			System.out.println("Criticidade: "+cr);
+
+		for (String cr : lista) {
+			System.out.println("Criticidade: " + cr);
 		}
 	}
-	
+
 	@Test
 	@Ignore
-	public void listagemDeSistemas(){
+	public void listagemDeSistemas() {
 		ChamadoDAO chamadoDAO = new ChamadoDAO();
 		List<String> lista = chamadoDAO.listaDeSistemas();
-		
-		for(String st : lista){
+
+		for (String st : lista) {
 			System.out.println(st);
 		}
 	}
-	
+
 	@Test
 	@Ignore
-	public void calculaIdadeChamado(){
-		Date dtAtual = new Date();		
+	public void calculaIdadeChamado() {
+		Date dtAtual = new Date();
 		Date dtChamado = new Date("27/05/2016");
-		
+
 		DateTime dt = new DateTime();
-		
-		System.out.println("Obj DateTime: "+dt);
-		
+
+		System.out.println("Obj DateTime: " + dt);
+
 		DateTime dt1 = new DateTime(dtAtual);
 		DateTime dt2 = new DateTime(dtChamado);
-		
+
 		int dias = Days.daysBetween(dt1, dt2).getDays();
-		
-		System.out.println("Idade do chamado: "+dias+" dias");
-		
+
+		System.out.println("Idade do chamado: " + dias + " dias");
+
 	}
-	
+
 	@Test
-	public void idadeChamadoPorSistema(){
+	public void chamadoPorVencimento() {
 		ChamadoDAO chamadoDAO = new ChamadoDAO();
-		
-		List<String> listaDeSistemas = new ArrayList<>();
-		
-		listaDeSistemas = chamadoDAO.listaDeSistemas();
-		
-		List<Chamado> listaDechamados = new ArrayList<>();
-		
-		listaDechamados = chamadoDAO.listarChamadosAbertos();
-		
-		
-		int qtd = 0;
-		for(String s : listaDeSistemas){
-			
-			for (Chamado c : listaDechamados){
-				
-				if(c.getSetorAbertura().equals(s)){
-					qtd+=1;
-					System.out.println("Obj c "+c.getSetorAbertura()+" - Obj s: "+s+" qtd: "+qtd);
-				} 
-			 	
-			}
-			qtd = 0;
-			listaDechamados = chamadoDAO.listarChamadosAbertos();
+
+		List<Chamado> listaCh = new ArrayList<>();
+
+		try {
+
+			listaCh = chamadoDAO.listarChamadosAbertos();
+
+		} catch (RuntimeException exception) {
+			exception.printStackTrace();
 		}
-		System.out.println("qtd: "+qtd);
-		
-		
+		int aVencer = 0;
+		int amanha = 0;
+		int hoje = 0;
+		int vencido = 0;
+		int qtd = 0;
+
+		DateTime dtHj = new DateTime();
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
+
+		for (Chamado c : listaCh) {
+
+			DateTime dtChamado = new DateTime(c.getVencimentoSla());
+
+			if (!dtChamado.isEqual(null)) {
+				String dtCh = dtChamado.toString(fmt);
+				DateTime dc = fmt.parseDateTime(dtCh);
+				String dthoje = dtHj.toString(fmt);
+				DateTime dh = fmt.parseDateTime(dthoje);
+				if (dc.isBefore(dh)) {
+					System.out.println("Numero: " + c.getNumeroChamado() + " - setor: " + c.getSetorAbertura()
+							+ " Status: " + c.getStatusChamado().getStatus() + " - SLA: " + c.getVencimentoSla()
+							+ " vencido");
+					vencido += 1;
+				}
+
+				if (dc.isEqual(dh)) {
+					System.out.println(
+							"Numero: " + c.getNumeroChamado() + " - setor: " + c.getSetorAbertura() + " Status: "
+									+ c.getStatusChamado().getStatus() + " - SLA: " + c.getVencimentoSla() + " hoje");
+					hoje += 1;
+				}
+
+				if (dc.isEqual(dh.plusDays(1))) {
+					System.out.println(
+							"Numero: " + c.getNumeroChamado() + " - setor: " + c.getSetorAbertura() + " Status: "
+									+ c.getStatusChamado().getStatus() + " - SLA: " + c.getVencimentoSla() + " amanhã");
+					amanha += 1;
+				}
+
+				if (dc.isAfter(dh.plusDays(1))) {
+					System.out.println(
+							"Numero: " + c.getNumeroChamado() + " - setor: " + c.getSetorAbertura() + " Status: "
+									+ c.getStatusChamado().getStatus() + " - SLA: " + c.getVencimentoSla() + " a vencer");
+					aVencer += 1;
+				}
+			}
+		}
+		System.out.println("Qtd vencido: " + vencido);
+		System.out.println("Qtd hoje: " + hoje);
+		System.out.println("Qtd amanhã: " + amanha);
+		System.out.println("Qtd a vencer: " + aVencer);
+		int total = vencido+hoje+amanha+aVencer;
+		System.out.println("Qtd total chamado: " + total );
+
 	}
+
 }

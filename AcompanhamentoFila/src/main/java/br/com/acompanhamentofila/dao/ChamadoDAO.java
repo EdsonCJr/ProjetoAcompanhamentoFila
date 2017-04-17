@@ -130,6 +130,8 @@ public class ChamadoDAO extends GenericDAO<Chamado> {
 			 * considetar o nome do atributo da clase, ou seja, "operadores"
 			 */
 			Criteria query = session.createCriteria(Chamado.class);
+			query.createAlias("statusChamado", "sc");
+			query.add(Restrictions.ne("sc.status", "Resolvido"));
 			query.createCriteria("operadores").add(Restrictions.idEq(op.getCodigo()));
 
 			List<Chamado> listaDeChamados = query.list();
