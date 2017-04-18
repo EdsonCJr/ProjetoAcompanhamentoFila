@@ -79,6 +79,14 @@
 			<version>5.2</version>
 		</dependency>
 
+		<!-- Primefaces Extensions -->
+		<dependency>
+			<groupId>org.primefaces.extensions</groupId>
+			<artifactId>primefaces-extensions</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+
+
 		<!-- Omnifaces -->
 		<dependency>
 			<groupId>org.omnifaces</groupId>
