@@ -24,7 +24,7 @@ import br.com.acompanhamentofila.domain.Chamado;
 
 @ManagedBean(name = "chamadoGraficoMB")
 public class ChamadoGraficoBean {
-
+	
 	private BarChartModel barModel;
 
 	public BarChartModel getBarModel() {
@@ -41,7 +41,7 @@ public class ChamadoGraficoBean {
 	public void init() {
 		createBarModels();
 	}
-
+	
 	private BarChartModel initBarModel() {
 
 		ChamadoDAO chamadoDAO = new ChamadoDAO();
@@ -122,7 +122,7 @@ public class ChamadoGraficoBean {
 		createBarModel();
 		createGbarModel();
 	}
-
+	
 	private void createBarModel() {
 		barModel = initBarModel();
 
@@ -192,9 +192,11 @@ public class ChamadoGraficoBean {
 			}
 		}
 
-		chartModel = new GChartModelBuilder().setChartType(GChartType.COLUMN)
-				.addColumns("Vencido", "Hoje", "Amanhã", "A vencer").addRow("Vencido", chVencido).addRow("Hoje", chHoje)
-				.addRow("Amanhã", chAmanha).addRow("A vencer", chAvencer).build();
+		
+		chartModel = new GChartModelBuilder().setChartType(GChartType.COLUMN)  
+                .addColumns("Categorias", "Vencido","Hoje","Amanhã","A vencer")  
+                .addRow("Categorias",  chVencido, chHoje, chAmanha, chAvencer)
+                .build();
 	}
 
 }
