@@ -24,30 +24,68 @@ import br.com.acompanhamentofila.domain.Chamado;
 
 @ManagedBean(name = "chamadoGraficoMB")
 public class ChamadoGraficoBean {
-	
+
 	private BarChartModel barModel;
+
+	private GChartModel chartModel;
+
+	private List<Chamado> listaChamadoVencido = new ArrayList<>();
+	private List<Chamado> listaChamadoHoje = new ArrayList<>();
+	private List<Chamado> listaChamadoAmanha = new ArrayList<>();
+	private List<Chamado> listaChamadoaVencer = new ArrayList<>();
 
 	public BarChartModel getBarModel() {
 		return barModel;
 	}
 
-	private GChartModel chartModel;
-
 	public GChartModel getChartModel() {
 		return chartModel;
 	}
 
+	public List<Chamado> getListaChamadoVencido() {
+		return listaChamadoVencido;
+	}
+
+	public List<Chamado> getListaChamadoHoje() {
+		return listaChamadoHoje;
+	}
+
+	public List<Chamado> getListaChamadoAmanha() {
+		return listaChamadoAmanha;
+	}
+
+	public List<Chamado> getListaChamadoaVencer() {
+		return listaChamadoaVencer;
+	}
+
+	public void setListaChamadoVencido(List<Chamado> listaChamadoVencido) {
+		this.listaChamadoVencido = listaChamadoVencido;
+	}
+
+	public void setListaChamadoHoje(List<Chamado> listaChamadoHoje) {
+		this.listaChamadoHoje = listaChamadoHoje;
+	}
+
+	public void setListaChamadoAmanha(List<Chamado> listaChamadoAmanha) {
+		this.listaChamadoAmanha = listaChamadoAmanha;
+	}
+
+	public void setListaChamadoaVencer(List<Chamado> listaChamadoaVencer) {
+		this.listaChamadoaVencer = listaChamadoaVencer;
+	}
+
 	@PostConstruct
 	public void init() {
-		createBarModels();
+		createBarModels();		
 	}
-	
+
+	/*
 	private BarChartModel initBarModel() {
 
-		ChamadoDAO chamadoDAO = new ChamadoDAO();
 		List<Chamado> listaChamadosAbertos = new ArrayList<>();
 
 		try {
+			ChamadoDAO chamadoDAO = new ChamadoDAO();
 			listaChamadosAbertos = chamadoDAO.listarChamadosAbertos();
 		} catch (RuntimeException exception) {
 			Messages.addGlobalError("Ocorreu um erro ao gerar a lista de chamados");
@@ -117,12 +155,14 @@ public class ChamadoGraficoBean {
 
 		return model;
 	}
+	*/
 
 	private void createBarModels() {
-		createBarModel();
+		//createBarModel();
 		createGbarModel();
 	}
-	
+
+	/*
 	private void createBarModel() {
 		barModel = initBarModel();
 
@@ -141,13 +181,14 @@ public class ChamadoGraficoBean {
 		yAxis.setMax(200);
 
 	}
+	*/
 
 	public void createGbarModel() {
 
-		ChamadoDAO chamadoDAO = new ChamadoDAO();
 		List<Chamado> listaChAbertos = new ArrayList<>();
 
 		try {
+			ChamadoDAO chamadoDAO = new ChamadoDAO();
 			listaChAbertos = chamadoDAO.listarChamadosAbertos();
 		} catch (RuntimeException exception) {
 			Messages.addGlobalError("Ocorreu um erro ao gerar a lista de chamados");
@@ -176,27 +217,28 @@ public class ChamadoGraficoBean {
 
 				if (sla.isBefore(dtAtual)) {
 					chVencido += 1;
+					listaChamadoVencido.add(c);
 				}
 
 				if (sla.isEqual(dtAtual)) {
 					chHoje += 1;
+					listaChamadoHoje.add(c);
 				}
 
 				if (sla.isEqual(dtAtual.plusDays(1))) {
 					chAmanha += 1;
+					listaChamadoAmanha.add(c);
 				}
 
 				if (sla.isAfter(dtAtual.plusDays(1))) {
 					chAvencer += 1;
+					listaChamadoaVencer.add(c);
 				}
 			}
 		}
 
-		
-		chartModel = new GChartModelBuilder().setChartType(GChartType.COLUMN)  
-                .addColumns("Categorias", "Vencido","Hoje","Amanhã","A vencer")  
-                .addRow("Categorias",  chVencido, chHoje, chAmanha, chAvencer)
-                .build();
+		chartModel = new GChartModelBuilder().setChartType(GChartType.COLUMN)
+				.addColumns("Categorias", "Vencido", "Hoje", "Amanhã", "A vencer")
+				.addRow("Categorias", chVencido, chHoje, chAmanha, chAvencer).build();
 	}
-
 }

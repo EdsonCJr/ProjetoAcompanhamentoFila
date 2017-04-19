@@ -11,10 +11,88 @@
 
 	<ui:define name="conteudo">
 
-		<p:chart type="bar" model="#{chamadoGraficoMB.barModel}" />
+		<p:panel>
 
-		<pe:gChart title="GChart chamados"
-			value="#{chamadoGraficoMB.chartModel}" />
+			<!-- 
+				<p:chart type="bar" model="#{chamadoGraficoMB.barModel}" />
+			 -->
+			<pe:gChart title="Chamados em atendimento por vencimento"
+				value="#{chamadoGraficoMB.chartModel}" />
 
+			<p:tabView>
+
+				<p:tab title="Chamados vencidos">
+					<h:form>
+						<p:dataTable id="tblVencido"
+							value="#{chamadoGraficoMB.listaChamadoVencido}" var="chVencido"
+							paginator="true" paginatorPosition="bottom" rows="10">
+							<p:column headerText="Número chamado">
+								<h:outputText value="#{chVencido.numeroChamado}" />
+							</p:column>
+
+							<p:column headerText="Status do chamado">
+								<h:outputText value="#{chVencido.statusChamado.status}" />
+							</p:column>
+
+							<p:column headerText="SLA">
+								<h:outputText value="#{chVencido.vencimentoSla}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
+							</p:column>
+						</p:dataTable>
+					</h:form>
+				</p:tab>
+
+				<p:tab title="Chamados vencendo hoje">
+					<h:form>
+						<p:dataTable id="tblVencido"
+							value="#{chamadoGraficoMB.listaChamadoHoje}" var="chHoje">
+							<p:column headerText="Número chamado">
+								<h:outputText value="#{chHoje.numeroChamado}" />
+							</p:column>
+
+							<p:column headerText="Status do chamado">
+								<h:outputText value="#{chHoje.statusChamado.status}" />
+							</p:column>
+						</p:dataTable>
+					</h:form>
+				</p:tab>
+
+				<p:tab title="Chamados vencendo amanhã">
+					<h:form>
+						<p:dataTable id="tblVencido"
+							value="#{chamadoGraficoMB.listaChamadoAmanha}" var="chAmanha">
+							<p:column headerText="Número chamado">
+								<h:outputText value="#{chAmanha.numeroChamado}" />
+							</p:column>
+
+							<p:column headerText="Status do chamado">
+								<h:outputText value="#{chAmanha.statusChamado.status}" />
+							</p:column>
+
+							<p:column headerText="SLA">
+								<h:outputText value="#{chAmanha.vencimentoSla}" />
+							</p:column>
+						</p:dataTable>
+					</h:form>
+				</p:tab>
+
+				<p:tab title="Chamados a vencer">
+					<h:form>
+						<p:dataTable id="tblVencido"
+							value="#{chamadoGraficoMB.listaChamadoaVencer}" var="chAvencer">
+							<p:column headerText="Número chamado">
+								<h:outputText value="#{chAvencer.numeroChamado}" />
+							</p:column>
+
+							<p:column headerText="Status do chamado">
+								<h:outputText value="#{chAvencer.statusChamado.status}" />
+							</p:column>
+						</p:dataTable>
+					</h:form>
+				</p:tab>
+
+			</p:tabView>
+		</p:panel>
 	</ui:define>
 </ui:composition>
