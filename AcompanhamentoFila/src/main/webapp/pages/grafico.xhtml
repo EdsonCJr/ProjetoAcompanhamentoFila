@@ -26,68 +26,181 @@
 						<p:dataTable id="tblVencido"
 							value="#{chamadoGraficoMB.listaChamadoVencido}" var="chVencido"
 							paginator="true" paginatorPosition="bottom" rows="10">
+
 							<p:column headerText="Número chamado">
 								<h:outputText value="#{chVencido.numeroChamado}" />
+							</p:column>
+
+							<p:column headerText="Data abertura">
+								<h:outputText value="#{chVencido.dataAbertura}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
 							</p:column>
 
 							<p:column headerText="Status do chamado">
 								<h:outputText value="#{chVencido.statusChamado.status}" />
 							</p:column>
 
-							<p:column headerText="SLA">
+							<p:column headerText="Setor de abertura">
+								<h:outputText value="#{chVencido.setorAbertura}" />
+							</p:column>
+
+							<p:column headerText="Criticidade">
+								<h:outputText value="#{chVencido.criticidade}" />
+							</p:column>
+
+							<p:column headerText="Operador">
+								<h:outputText value="#{chVencido.operadores.nome}" />
+							</p:column>
+
+							<p:column headerText="Vencimento SLA">
 								<h:outputText value="#{chVencido.vencimentoSla}">
 									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
 								</h:outputText>
 							</p:column>
+
+							<p:column headerText="Idade do chamado">
+								<h:outputText value="#{chVencido.idadeChamado}" />
+							</p:column>
+
 						</p:dataTable>
 					</h:form>
 				</p:tab>
 
 				<p:tab title="Chamados vencendo hoje">
 					<h:form>
-						<p:dataTable id="tblVencido"
-							value="#{chamadoGraficoMB.listaChamadoHoje}" var="chHoje">
+						<p:dataTable id="tblHoje"
+							value="#{chamadoGraficoMB.listaChamadoHoje}" var="chHoje"
+							paginator="true" paginatorPosition="bottom" rows="10">
+
 							<p:column headerText="Número chamado">
 								<h:outputText value="#{chHoje.numeroChamado}" />
+							</p:column>
+
+							<p:column headerText="Data abertura">
+								<h:outputText value="#{chHoje.dataAbertura}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
 							</p:column>
 
 							<p:column headerText="Status do chamado">
 								<h:outputText value="#{chHoje.statusChamado.status}" />
 							</p:column>
+
+							<p:column headerText="Setor de abertura">
+								<h:outputText value="#{chHoje.setorAbertura}" />
+							</p:column>
+
+							<p:column headerText="Criticidade">
+								<h:outputText value="#{chHoje.criticidade}" />
+							</p:column>
+
+							<p:column headerText="Operador">
+								<h:outputText value="#{chHoje.operadores.nome}" />
+							</p:column>
+
+							<p:column headerText="Vencimento SLA">
+								<h:outputText value="#{chHoje.vencimentoSla}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Idade do chamado">
+								<h:outputText value="#{chHoje.idadeChamado}" />
+							</p:column>
+
 						</p:dataTable>
 					</h:form>
 				</p:tab>
 
 				<p:tab title="Chamados vencendo amanhã">
 					<h:form>
-						<p:dataTable id="tblVencido"
-							value="#{chamadoGraficoMB.listaChamadoAmanha}" var="chAmanha">
+						<p:dataTable id="tblAmanha"
+							value="#{chamadoGraficoMB.listaChamadoAmanha}" var="chAmanha"
+							paginator="true" paginatorPosition="bottom" rows="10">
+
 							<p:column headerText="Número chamado">
-								<h:outputText value="#{chAmanha.numeroChamado}" />
+								<h:outputText value="#{chHoje.numeroChamado}" />
+							</p:column>
+
+							<p:column headerText="Data abertura">
+								<h:outputText value="#{chAmanha.dataAbertura}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
 							</p:column>
 
 							<p:column headerText="Status do chamado">
 								<h:outputText value="#{chAmanha.statusChamado.status}" />
 							</p:column>
 
-							<p:column headerText="SLA">
-								<h:outputText value="#{chAmanha.vencimentoSla}" />
+							<p:column headerText="Setor de abertura">
+								<h:outputText value="#{chAmanha.setorAbertura}" />
 							</p:column>
+
+							<p:column headerText="Criticidade">
+								<h:outputText value="#{chAmanha.criticidade}" />
+							</p:column>
+
+							<p:column headerText="Operador">
+								<h:outputText value="#{chAmanha.operadores.nome}" />
+							</p:column>
+
+							<p:column headerText="Vencimento SLA">
+								<h:outputText value="#{chAmanha.vencimentoSla}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Idade do chamado">
+								<h:outputText value="#{chAmanha.idadeChamado}" />
+							</p:column>
+
 						</p:dataTable>
 					</h:form>
 				</p:tab>
 
 				<p:tab title="Chamados a vencer">
 					<h:form>
-						<p:dataTable id="tblVencido"
-							value="#{chamadoGraficoMB.listaChamadoaVencer}" var="chAvencer">
+						<p:dataTable id="tblAvencer"
+							value="#{chamadoGraficoMB.listaChamadoaVencer}" var="chAvencer"
+							paginator="true" paginatorPosition="bottom" rows="10">
+
 							<p:column headerText="Número chamado">
 								<h:outputText value="#{chAvencer.numeroChamado}" />
+							</p:column>
+
+							<p:column headerText="Data abertura">
+								<h:outputText value="#{chAvencer.dataAbertura}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
 							</p:column>
 
 							<p:column headerText="Status do chamado">
 								<h:outputText value="#{chAvencer.statusChamado.status}" />
 							</p:column>
+
+							<p:column headerText="Setor de abertura">
+								<h:outputText value="#{chAvencer.setorAbertura}" />
+							</p:column>
+
+							<p:column headerText="Criticidade">
+								<h:outputText value="#{chAvencer.criticidade}" />
+							</p:column>
+
+							<p:column headerText="Operador">
+								<h:outputText value="#{chAvencer.operadores.nome}" />
+							</p:column>
+
+							<p:column headerText="Vencimento SLA">
+								<h:outputText value="#{chAvencer.vencimentoSla}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Idade do chamado">
+								<h:outputText value="#{chAvencer.idadeChamado}" />
+							</p:column>
+
 						</p:dataTable>
 					</h:form>
 				</p:tab>

@@ -16,7 +16,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "tbl_chamado")
-public class Chamado {
+public class Chamado implements Serializable {
 
 	@Id
 	private long numeroChamado;
@@ -50,7 +50,7 @@ public class Chamado {
 	@Column
 	private Date dataUltimaResp;
 
-	@Column(length = 1000)
+	@Column(length = 1200)
 	private String ultimaIntervecao;
 
 	@Column(length = 1000)
