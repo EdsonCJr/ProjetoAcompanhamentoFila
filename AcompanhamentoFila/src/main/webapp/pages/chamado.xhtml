@@ -106,7 +106,8 @@
 					</h:outputText>
 				</p:column>
 
-				<p:column headerText="Idade Chamado" sortBy="#{chamado.idadeChamado}">
+				<p:column headerText="Idade Chamado"
+					sortBy="#{chamado.idadeChamado}">
 					<h:outputText value="#{chamado.idadeChamado}" />
 				</p:column>
 
@@ -122,6 +123,11 @@
 						<f:attribute name="chamadoSelecionado" value="#{chamado}" />
 					</p:commandButton>
 				</p:column>
+
+				<f:facet name="footer">
+					<h:outputLabel value="Total de chamdos: " />
+					<h:outputText value="#{chamadoMB.listaDeChamados.size()}" />
+				</f:facet>
 
 			</p:dataTable>
 

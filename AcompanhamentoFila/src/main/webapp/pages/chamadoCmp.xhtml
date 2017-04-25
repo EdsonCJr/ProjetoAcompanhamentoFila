@@ -122,6 +122,11 @@
 						</p:commandButton>
 					</p:column>
 
+					<f:facet name="footer">
+						<h:outputLabel value="Total de chamdos: " />
+						<h:outputText value="#{chamadoMB.listaDeChamados.size()}" />
+					</f:facet>
+
 				</p:dataTable>
 
 			</p:panel>

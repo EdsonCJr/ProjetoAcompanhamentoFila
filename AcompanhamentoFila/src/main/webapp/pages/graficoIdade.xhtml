@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="/template/template.xhtml">
+
+
+	<ui:define name="conteudo">
+
+		<p:panel>
+
+			<pe:gChart title="Chamados por idade"
+				value="#{graficoIdadeMB.gChartModel}" />
+
+
+			<p:tabView>
+
+				<p:tab title="Até 05 dias">
+					<h:form>
+						<p:dataTable id="tblCincodias"
+							value="#{graficoIdadeMB.listaCh05Dias}" var="chCincoDias"
+							paginator="true" paginatorPosition="bottom" rows="10">
+
+							<p:column headerText="Número chamado">
+								<h:outputText value="#{chCincoDias.numeroChamado}" />
+							</p:column>
+
+							<p:column headerText="Data abertura">
+								<h:outputText value="#{chCincoDias.dataAbertura}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Status do chamado">
+								<h:outputText value="#{chCincoDias.statusChamado.status}" />
+							</p:column>
+
+							<p:column headerText="Setor de abertura">
+								<h:outputText value="#{chCincoDias.setorAbertura}" />
+							</p:column>
+
+							<p:column headerText="Criticidade">
+								<h:outputText value="#{chCincoDias.criticidade}" />
+							</p:column>
+
+							<p:column headerText="Operador">
+								<h:outputText value="#{chCincoDias.operadores.nome}" />
+							</p:column>
+
+							<p:column headerText="Vencimento SLA">
+								<h:outputText value="#{chCincoDias.vencimentoSla}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Idade do chamado">
+								<h:outputText value="#{chCincoDias.idadeChamado}" />
+							</p:column>
+
+							<f:facet name="footer">
+								<h:outputLabel value="Total de chamdos: " />
+								<h:outputText
+									value="#{graficoIdadeMB.listaCh05Dias.size()}" />
+							</f:facet>
+
+						</p:dataTable>
+					</h:form>
+				</p:tab>
+
+				<p:tab title="Chamados de 06 até 15 dias">
+					<h:form>
+						<p:dataTable id="tbl06A15"
+							value="#{graficoIdadeMB.listaCh06A15Dias}" var="ch06A15D"
+							paginator="true" paginatorPosition="bottom" rows="10">
+
+							<p:column headerText="Número chamado">
+								<h:outputText value="#{ch06A15D.numeroChamado}" />
+							</p:column>
+
+							<p:column headerText="Data abertura">
+								<h:outputText value="#{ch06A15D.dataAbertura}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Status do chamado">
+								<h:outputText value="#{ch06A15D.statusChamado.status}" />
+							</p:column>
+
+							<p:column headerText="Setor de abertura">
+								<h:outputText value="#{ch06A15D.setorAbertura}" />
+							</p:column>
+
+							<p:column headerText="Criticidade">
+								<h:outputText value="#{ch06A15D.criticidade}" />
+							</p:column>
+
+							<p:column headerText="Operador">
+								<h:outputText value="#{ch06A15D.operadores.nome}" />
+							</p:column>
+
+							<p:column headerText="Vencimento SLA">
+								<h:outputText value="#{ch06A15D.vencimentoSla}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Idade do chamado">
+								<h:outputText value="#{ch06A15D.idadeChamado}" />
+							</p:column>
+							
+							<f:facet name="footer">
+								<h:outputLabel value="Total de chamdos: " />
+								<h:outputText
+									value="#{graficoIdadeMB.listaCh06A15Dias.size()}" />
+							</f:facet>
+
+						</p:dataTable>
+					</h:form>
+				</p:tab>
+
+				<p:tab title="Chamados de 16 até 25 Dias">
+					<h:form>
+						<p:dataTable id="tbl16A25D"
+							value="#{graficoIdadeMB.listaCh16A25Dias}" var="ch16A25D"
+							paginator="true" paginatorPosition="bottom" rows="10">
+
+							<p:column headerText="Número chamado">
+								<h:outputText value="#{ch16A25D.numeroChamado}" />
+							</p:column>
+
+							<p:column headerText="Data abertura">
+								<h:outputText value="#{ch16A25D.dataAbertura}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Status do chamado">
+								<h:outputText value="#{ch16A25D.statusChamado.status}" />
+							</p:column>
+
+							<p:column headerText="Setor de abertura">
+								<h:outputText value="#{ch16A25D.setorAbertura}" />
+							</p:column>
+
+							<p:column headerText="Criticidade">
+								<h:outputText value="#{ch16A25D.criticidade}" />
+							</p:column>
+
+							<p:column headerText="Operador">
+								<h:outputText value="#{ch16A25D.operadores.nome}" />
+							</p:column>
+
+							<p:column headerText="Vencimento SLA">
+								<h:outputText value="#{ch16A25D.vencimentoSla}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Idade do chamado">
+								<h:outputText value="#{ch16A25D.idadeChamado}" />
+							</p:column>
+
+							<f:facet name="footer">
+								<h:outputLabel value="Total de chamdos: " />
+								<h:outputText
+									value="#{graficoIdadeMB.listaCh16A25Dias.size()}" />
+							</f:facet>
+
+						</p:dataTable>
+					</h:form>
+				</p:tab>
+
+				<p:tab title="Chamados de 26 até 35 dias">
+					<h:form>
+						<p:dataTable id="tbl26A35D"
+							value="#{graficoIdadeMB.listaCh26A35Dias}" var="ch26A35D"
+							paginator="true" paginatorPosition="bottom" rows="10">
+
+							<p:column headerText="Número chamado">
+								<h:outputText value="#{ch26A35D.numeroChamado}" />
+							</p:column>
+
+							<p:column headerText="Data abertura">
+								<h:outputText value="#{ch26A35D.dataAbertura}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Status do chamado">
+								<h:outputText value="#{ch26A35D.statusChamado.status}" />
+							</p:column>
+
+							<p:column headerText="Setor de abertura">
+								<h:outputText value="#{ch26A35D.setorAbertura}" />
+							</p:column>
+
+							<p:column headerText="Criticidade">
+								<h:outputText value="#{ch26A35D.criticidade}" />
+							</p:column>
+
+							<p:column headerText="Operador">
+								<h:outputText value="#{ch26A35D.operadores.nome}" />
+							</p:column>
+
+							<p:column headerText="Vencimento SLA">
+								<h:outputText value="#{ch26A35D.vencimentoSla}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Idade do chamado">
+								<h:outputText value="#{ch26A35D.idadeChamado}" />
+							</p:column>
+							
+							<f:facet name="footer">
+								<h:outputLabel value="Total de chamdos: " />
+								<h:outputText
+									value="#{graficoIdadeMB.listaCh26A35Dias.size()}" />
+							</f:facet>
+
+						</p:dataTable>
+					</h:form>
+				</p:tab>
+
+				<p:tab title="Chamados de 36 até 45 dias">
+					<h:form>
+						<p:dataTable id="tbl36A45D"
+							value="#{graficoIdadeMB.listaCh36A45Dias}" var="ch36A45D"
+							paginator="true" paginatorPosition="bottom" rows="10">
+
+							<p:column headerText="Número chamado">
+								<h:outputText value="#{ch36A45D.numeroChamado}" />
+							</p:column>
+
+							<p:column headerText="Data abertura">
+								<h:outputText value="#{ch36A45D.dataAbertura}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Status do chamado">
+								<h:outputText value="#{ch36A45D.statusChamado.status}" />
+							</p:column>
+
+							<p:column headerText="Setor de abertura">
+								<h:outputText value="#{ch36A45D.setorAbertura}" />
+							</p:column>
+
+							<p:column headerText="Criticidade">
+								<h:outputText value="#{ch36A45D.criticidade}" />
+							</p:column>
+
+							<p:column headerText="Operador">
+								<h:outputText value="#{ch36A45D.operadores.nome}" />
+							</p:column>
+
+							<p:column headerText="Vencimento SLA">
+								<h:outputText value="#{ch36A45D.vencimentoSla}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Idade do chamado">
+								<h:outputText value="#{ch36A45D.idadeChamado}" />
+							</p:column>
+							
+							<f:facet name="footer">
+								<h:outputLabel value="Total de chamdos: " />
+								<h:outputText
+									value="#{graficoIdadeMB.listaCh36A45Dias.size()}" />
+							</f:facet>
+
+						</p:dataTable>
+					</h:form>
+				</p:tab>
+
+				<p:tab title="Chamados maiores que 45 dias">
+					<h:form>
+						<p:dataTable id="tblM45D"
+							value="#{graficoIdadeMB.listaChMaior45Dias}" var="chM45D"
+							paginator="true" paginatorPosition="bottom" rows="10">
+
+							<p:column headerText="Número chamado">
+								<h:outputText value="#{chM45D.numeroChamado}" />
+							</p:column>
+
+							<p:column headerText="Data abertura">
+								<h:outputText value="#{chM45D.dataAbertura}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Status do chamado">
+								<h:outputText value="#{chM45D.statusChamado.status}" />
+							</p:column>
+
+							<p:column headerText="Setor de abertura">
+								<h:outputText value="#{chM45D.setorAbertura}" />
+							</p:column>
+
+							<p:column headerText="Criticidade">
+								<h:outputText value="#{chM45D.criticidade}" />
+							</p:column>
+
+							<p:column headerText="Operador">
+								<h:outputText value="#{chM45D.operadores.nome}" />
+							</p:column>
+
+							<p:column headerText="Vencimento SLA">
+								<h:outputText value="#{chM45D.vencimentoSla}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Idade do chamado">
+								<h:outputText value="#{chM45D.idadeChamado}" />
+							</p:column>
+
+							<f:facet name="footer">
+								<h:outputLabel value="Total de chamdos: " />
+								<h:outputText
+									value="#{graficoIdadeMB.listaChMaior45Dias.size()}" />
+							</f:facet>
+
+						</p:dataTable>
+					</h:form>
+				</p:tab>
+
+			</p:tabView>
+
+		</p:panel>
+
+	</ui:define>
+</ui:composition>

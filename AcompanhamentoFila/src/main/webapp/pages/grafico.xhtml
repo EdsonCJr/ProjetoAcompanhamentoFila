@@ -63,6 +63,12 @@
 							<p:column headerText="Idade do chamado">
 								<h:outputText value="#{chVencido.idadeChamado}" />
 							</p:column>
+							
+							<f:facet name="footer">
+								<h:outputLabel value="Total de chamdos: " />
+								<h:outputText
+									value="#{chamadoGraficoMB.listaChamadoVencido.size()}" />
+							</f:facet>
 
 						</p:dataTable>
 					</h:form>
@@ -109,6 +115,12 @@
 							<p:column headerText="Idade do chamado">
 								<h:outputText value="#{chHoje.idadeChamado}" />
 							</p:column>
+							
+							<f:facet name="footer">
+								<h:outputLabel value="Total de chamdos: " />
+								<h:outputText
+									value="#{chamadoGraficoMB.listaChamadoHoje.size()}" />
+							</f:facet>
 
 						</p:dataTable>
 					</h:form>
@@ -155,6 +167,12 @@
 							<p:column headerText="Idade do chamado">
 								<h:outputText value="#{chAmanha.idadeChamado}" />
 							</p:column>
+							
+							<f:facet name="footer">
+								<h:outputLabel value="Total de chamdos: " />
+								<h:outputText
+									value="#{chamadoGraficoMB.listaChamadoAmanha.size()}" />
+							</f:facet>
 
 						</p:dataTable>
 					</h:form>
@@ -201,6 +219,12 @@
 							<p:column headerText="Idade do chamado">
 								<h:outputText value="#{chAvencer.idadeChamado}" />
 							</p:column>
+							
+							<f:facet name="footer">
+								<h:outputLabel value="Total de chamdos: " />
+								<h:outputText
+									value="#{chamadoGraficoMB.listaChamadoaVencer.size()}" />
+							</f:facet>
 
 						</p:dataTable>
 					</h:form>
