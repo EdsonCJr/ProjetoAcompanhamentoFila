@@ -16,7 +16,7 @@
 	<!-- Tema do Primefaces bootstrap, aristo, bluesky-->
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
-		<param-value>bluesky</param-value>
+		<param-value>none</param-value>
 	</context-param>
 
 	<!-- Configuração do JSF -->

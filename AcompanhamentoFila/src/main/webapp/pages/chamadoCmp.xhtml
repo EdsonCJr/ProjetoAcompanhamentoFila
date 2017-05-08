@@ -13,7 +13,7 @@
 
 			<p:panel header="Lista de chamados">
 
-				<p:dataTable id="tblChamado" paginator="true"
+				<p:dataTable id="tblChamado" reflow="true" paginator="true"
 					value="#{chamadoMB.listaDeChamados}" var="chamado" rows="10"
 					paginatorPosition="bottom" widgetVar="dtChamado"
 					filteredValue="#{chamadoMB.chamadosFiltrados}">
